@@ -35,9 +35,9 @@ function Home() {
             <h2 class="mt-1">How?</h2>
             <p>
               <strong>How do I use it?</strong> You can use the Books dropdown to go to a specific chapter or use
-              the search bar to look up a specific passage. <a href="search?text=Jer+31:31-34">Try now!</a> 
-              In addition, you can search directly for Hebrew or English words or phrases (optionally limiting your
-              search to a single book, or range of books.) <a href="search?text=*nephesh+books:Gen-Deu,Psa">Try now!</a>
+              the search bar to look up a specific passage. <a href="search?text=Jer+31:31-34">Try now!</a> In addition,
+              you can search directly for Hebrew or English words or phrases (optionally limiting your search to a
+              single book, or range of books.) <a href="search?text=*nephesh+books:Gen-Deu,Psa">Try now!</a>
             </p>
           </Col>
           <Col>
@@ -60,8 +60,7 @@ function Home() {
             </p>
             <p>
               I would love to hear feedback on your experience of using this site, what you like or what could be
-              improved. Just drop me an email at
-              <a href="mailto:joe@barebonesbible.com?Subject=B3%20Feedback" target="_top">joe@barebonesbible.com</a>.
+              improved. Just drop me an email at <a href="mailto:joe@barebonesbible.com?Subject=B3%20Feedback" target="_top">joe@barebonesbible.com</a>.
             </p>
           </Col>
         </Row>

@@ -20,6 +20,10 @@ body {
   max-height: 500px;
   overflow-y: auto;  /* or scroll */
 }
+/* Book */
+.book {
+  text-align: center;
+}
 /* Hebrew highlighting */
 .hebrew {
   font-family: 'David Libre', serif;
