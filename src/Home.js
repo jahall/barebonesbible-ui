@@ -11,17 +11,19 @@ function Home() {
   return (
     <div className="home">
       <Jumbotron style={{ backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url(${scrolls})` }}>
-        <h1 className="display-3">Hello!</h1>
-        <p className="lead">
-          The Bare Bones Bible (B<sup>3</sup>) is an awesome tool to help you engage with the Hebrew scriptures.
-          Enjoy browsing by book or looking up words.
-        </p>
-        <p>
-          <Button variant="primary">Learn more</Button>
-        </p>
+        <Container>
+          <h1 className="display-3">Hello!</h1>
+          <p className="lead">
+            The Bare Bones Bible (B<sup>3</sup>) is an awesome tool to help you engage with the Hebrew scriptures.
+            Enjoy browsing by book or looking up words.
+          </p>
+          <p>
+            <Button variant="primary">Learn more</Button>
+          </p>
+        </Container>
       </Jumbotron>
       <Container>
-        <Row lg={3} sm={1}>
+        <Row lg={3} md={1}>
           <Col>
             <h2 class="mt-1">Why?</h2>
             <p>
