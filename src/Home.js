@@ -10,7 +10,7 @@ import Row from 'react-bootstrap/Row';
 function Home() {
   return (
     <div className="home">
-      <Jumbotron style={{ backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url(${scrolls})` }}>
+      <Jumbotron style={{ backgroundImage: `linear-gradient(rgba(255,255,255,0.4), rgba(0,0,0,0.4)), url(${scrolls})` }}>
         <Container>
           <h1 className="display-3">Hello!</h1>
           <p className="lead">
