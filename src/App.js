@@ -3,7 +3,7 @@ import './App.css';
 import Book from './Book';
 import Chapter from './Chapter';
 import Home from './Home';
-import NavBar from './NavBar';
+import NavBar2 from './NavBar';
 import {
   BrowserRouter as Router,
   Switch,
@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <NavBar />
+        <NavBar2 />
         <Switch>
           <Route path="/books/:book/:chapter" children={<Chapter />} />
           <Route path="/books/:book" children={<Book />} />
