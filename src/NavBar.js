@@ -17,7 +17,7 @@ class NavBar2 extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://khcexcvtn4.execute-api.eu-west-2.amazonaws.com/default/books", {
+    fetch("https://api.barebonesbible.com/books", {
       headers: {
         "x-api-key": "ISXgnAI2Cr4LIBTpe5IpzTMqr9CIDzn5rXlRriT5"
       }
