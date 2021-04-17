@@ -12,7 +12,7 @@ class Book extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "Oops!",
+      name: "",
       chapters: 0
     };
   }
@@ -53,8 +53,10 @@ class Book extends React.Component {
 
   _toButton(chapter) {
     let code = this.props.match.params.code;
+    let key = code + "." + chapter;
+    let href = "/books/" + code + "/" + chapter;
     return (
-      <Button className="chapter-button" variant="outline-dark" size="lg" href={"/books/" + code + "/" + chapter}>{chapter}</Button>)
+      <Button key={key} className="chapter-button" variant="outline-dark" size="lg" href={href}>{chapter}</Button>)
 
   }
 }
