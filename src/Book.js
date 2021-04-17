@@ -2,33 +2,62 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import React from 'react';
 
-import { useParams } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 
-function Book() {
-  let { book } = useParams();
-  /* TODO: Get from API */
-  const chapters = [1, 2, 3, 4, 5];
-  return (
-    <div className="book">
-      <Container>
-        <Row lg={1}>
-          <h1 class="mt-5">{ book }</h1>
-        </Row>
-        <hr />
-        <Row>
-          <Col>
-            {chapters.map((chapter) => toButton(book, chapter))}
-          </Col>
-        </Row>
-      </Container>
-    </div>
-  )
+
+class Book extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "Oops!",
+      chapters: 0
+    };
+  }
+
+  componentDidMount() {
+    /* Load proper name and chapter info from the api */
+    let code = this.props.match.params.code;
+    fetch("https://api.barebonesbible.com/books/" + code)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            name: result.name,
+            chapters: result.chapters
+          });
+        }
+      )
+  }
+
+  render() {
+    let chapters = Array.from({length: this.state.chapters}, (_, i) => i + 1)
+    return (
+      <div className="book">
+        <Container>
+          <Row lg={1}>
+            <h1 class="mt-5">{ this.state.name }</h1>
+          </Row>
+          <hr />
+          <Row>
+            <Col>
+              {chapters.map((chapter) => this._toButton(chapter))}
+            </Col>
+          </Row>
+        </Container>
+      </div>
+    )
+  }
+
+  _toButton(chapter) {
+    let code = this.props.match.params.code;
+    return (
+      <Button className="chapter-button" variant="outline-dark" size="lg" href={"/books/" + code + "/" + chapter}>{chapter}</Button>)
+
+  }
 }
 
-function toButton(book, chapter) {
-  return <Button className="chapter-button" href={"/books/" + book + "/" + chapter}>{chapter}</Button>
-}
-
-export default Book;
+/* withRouter allows you to access this.props.match.params from within the class! */
+export default withRouter(Book);
