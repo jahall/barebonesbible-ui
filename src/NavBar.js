@@ -19,7 +19,8 @@ class NavBar2 extends React.Component {
   componentDidMount() {
     fetch("https://api.barebonesbible.com/books", {
       headers: {
-        "x-api-key": "ISXgnAI2Cr4LIBTpe5IpzTMqr9CIDzn5rXlRriT5"
+        "Access-Control-Allow-Origin" : "*",
+        "X-Api-Key": "ISXgnAI2Cr4LIBTpe5IpzTMqr9CIDzn5rXlRriT5"
       }
     })
       .then(res => res.json())
