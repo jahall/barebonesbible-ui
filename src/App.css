@@ -1,3 +1,6 @@
+/*
+Nice colors: https://coolors.co/f94144-f3722c-f8961e-f9844a-f9c74f-90be6d-43aa8b-4d908e-577590-277da1
+*/
 /* Body */
 body {
   font-family: 'Montserrat', sans-serif;
@@ -37,7 +40,19 @@ body {
   text-decoration: none;  /* Avoid underline on hover */
 }
 .hebrew a:hover {
-  text-shadow: 2px 2px 10px #007BFF;
+  text-shadow: 2px 2px 10px #577590;
+}
+.token-prefix {
+  color: #277da1;
+}
+.token-suffix {
+  color: #6b705c;
+}
+.token-punc {
+  color: #6b705c;
+}
+.token-clicked {
+  color: #f4a261
 }
 /* Transliteration */
 .translit {

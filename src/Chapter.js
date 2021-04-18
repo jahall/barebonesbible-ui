@@ -13,9 +13,11 @@ class Chapter extends React.Component {
     this.state = {
       name: "",
       chapters: 0,
-      verses: []
+      verses: [],
+      tokenHighlight: null,
     };
     this._constructVerses.bind(this);
+    this._constructToken.bind(this);
   }
 
   componentDidMount() {
@@ -27,7 +29,7 @@ class Chapter extends React.Component {
       .then(res => this.setState({name: res.name, chapters: res.chapters}))
     fetch("https://api.barebonesbible.com/books/" + code + "/" + chapter)
       .then(res => res.json())
-      .then(res => this.setState({verses: res}))
+      .then(res => this.setState({verses: res.verses}))
   }
 
   render() {
@@ -48,31 +50,58 @@ class Chapter extends React.Component {
               </h1>
             </Col>
           </Row>
-          {this.state.verses.map(verse => this._constructVerses(code, verse))}
+          {this.state.verses.map(verse => this._constructVerses(code, chapter, verse))}
         </Container>
       </div>
     )
   }
 
-  _constructVerses(code, verse) {
-    let key = verse.chapter_osis_id + "." + verse.toString();
+  _constructVerses(code, chapter, verse) {
+    let key = verse.chapterId + "." + verse.verseNum.toString();
     return (
-      <Row key={verse} lg={1}>
+      <Row key={key} lg={1}>
         <Col>
-          <div className="text-right">
-            <p>
+          <p>
+            <strong>{code} {chapter}</strong>:<sub>{verse.verseNum}</sub>
+            &nbsp;&nbsp;
+            <span class="english">
+              {verse.enTokens.map((token, index) => this._constructToken(key, index, token))}
+            </span>
+          </p>
+          <p>
+            <div className="text-right">
               <bdo dir="rtl">
-                <bdo dir="ltr">
-                  <strong>{code}:</strong> {verse.verse}
+                {/*<bdo dir="ltr">
+                  <strong>{chapter}:</strong>{verse.verseNum}
                 </bdo>
-                &nbsp;
-                <span class="hebrew">{verse.tokens.map(token => token.text)}</span>
+                &nbsp;&nbsp;*/}
+                <span class="hebrew">
+                  {verse.heTokens.map((token, index) => this._constructToken(key, index, token))}
+                </span>
               </bdo>
-            </p>
-          </div>
+            </div>
+          </p>
         </Col>
       </Row>
     )
+  }
+
+  _constructToken(verseKey, index, token) {
+    let key = verseKey + "." + index.toString();
+    var text = token.text;
+    text = <span onClick={(e) => this._handleClick(e, token.code)}>{text}</span>;
+    if (token.code && token.code === this.state.tokenHighlight) {
+      text = <span className="token-clicked">{text}</span>;
+    }
+    if (token.code) {
+      text = <a href="#">{text}</a>;
+    }
+    return <span key={key} className={"token-" + token.type}>{text}</span>
+  }
+
+  _handleClick(event, code) {
+    event.preventDefault();
+    this.setState({tokenHighlight: code});
   }
 
 }
