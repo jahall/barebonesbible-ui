@@ -65,20 +65,20 @@ class Chapter extends React.Component {
             <strong>{code} {chapter}</strong>:<sub>{verse.verseNum}</sub>
             &nbsp;&nbsp;
             <span class="english">
-              {verse.enTokens.map((token, index) => this._constructToken(key, index, token))}
+              {verse.enTokens.map((token, index) => this._constructToken(key, index, token, "text"))}
             </span>
           </p>
           <p>
             <div className="text-right">
               <bdo dir="rtl">
-                {/*<bdo dir="ltr">
-                  <strong>{chapter}:</strong>{verse.verseNum}
-                </bdo>
-                &nbsp;&nbsp;*/}
                 <span class="hebrew">
-                  {verse.heTokens.map((token, index) => this._constructToken(key, index, token))}
+                  {verse.heTokens.map((token, index) => this._constructToken(key, index, token, "text"))}
                 </span>
               </bdo>
+              <br/>
+              <span class="translit">
+                {verse.heTokens.map((token, index) => this._constructToken(key, index, token, "transliteration"))}
+              </span>
             </div>
           </p>
         </Col>
@@ -86,9 +86,9 @@ class Chapter extends React.Component {
     )
   }
 
-  _constructToken(verseKey, index, token) {
+  _constructToken(verseKey, index, token, field) {
     let key = verseKey + "." + index.toString();
-    var text = token.text;
+    var text = token[field];
     text = <span onClick={(e) => this._handleClick(e, token.code)}>{text}</span>;
     if (token.code && token.code === this.state.tokenHighlight) {
       text = <span className="token-clicked">{text}</span>;
