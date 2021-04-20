@@ -7,8 +7,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import React from 'react';
 
-import { GearFill } from 'react-bootstrap-icons';
-
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -16,9 +14,7 @@ class NavBar extends React.Component {
     this.state = {
       error: null,
       collections: [],
-      translitChecked: true,
     };
-    this.handleTranslitClick = this.handleTranslitClick.bind(this);
   }
 
   componentDidMount() {
@@ -39,10 +35,6 @@ class NavBar extends React.Component {
       )
   }
 
-  handleTranslitClick() {
-    this.setState({translitChecked: !this.state.translitChecked});
-  }
-
   render() {
     const { error, collections } = this.state;
     if (error) {
@@ -54,7 +46,7 @@ class NavBar extends React.Component {
     }
     return (
       <Navbar fixed="top" variant="dark" bg="dark" expand="lg">
-        <Navbar.Brand href="/home">Bare Bones Bible {this.state.translitChecked.toString()}</Navbar.Brand>
+        <Navbar.Brand href="/home">Bare Bones Bible</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
@@ -67,9 +59,15 @@ class NavBar extends React.Component {
                 <Form>
                   <Form.Check
                     type="checkbox"
+                    label="Cantillations"
+                    defaultChecked={this.props.showCantillations}
+                    onChange={this.props.handleCantillationsClick}
+                  />
+                  <Form.Check
+                    type="checkbox"
                     label="Transliteration"
-                    defaultChecked={this.state.translitChecked}
-                    onChange={this.handleTranslitClick}
+                    defaultChecked={this.props.showTranslit}
+                    onChange={this.props.handleTranslitClick}
                   />
                 </Form>
               </Container>

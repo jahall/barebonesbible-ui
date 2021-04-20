@@ -16,8 +16,8 @@ class Chapter extends React.Component {
       verses: [],
       tokenHighlight: null,
     };
-    this._constructVerses.bind(this);
-    this._constructToken.bind(this);
+    this._constructVerse = this._constructVerse.bind(this);
+    this._constructToken = this._constructToken.bind(this);
   }
 
   componentDidMount() {
@@ -50,35 +50,48 @@ class Chapter extends React.Component {
               </h1>
             </Col>
           </Row>
-          {this.state.verses.map(verse => this._constructVerses(code, chapter, verse))}
+          {this.state.verses.map(verse => this._constructVerse(code, chapter, verse))}
         </Container>
       </div>
     )
   }
 
-  _constructVerses(code, chapter, verse) {
+  _constructVerse(code, chapter, verse) {
     let key = verse.chapterId + "." + verse.verseNum.toString();
+    let english = (
+      <span class="english">
+        {verse.enTokens.map((token, index) => this._constructToken(key, index, token, "text"))}
+      </span>
+    );
+    let field = (this.props.showCantillations) ? "text" : "text_no_cantillations";
+    let hebrew = (
+      <span class="hebrew">
+        {verse.heTokens.map((token, index) => this._constructToken(key, index, token, field))}
+      </span>
+    );
+    var translit = "";
+    if (this.props.showTranslit) {
+      translit = (
+        <span class="translit">
+          <br/>
+          {verse.heTokens.map((token, index) => this._constructToken(key, index, token, "transliteration"))}
+        </span>
+      );
+    }
     return (
       <Row key={key} lg={1}>
         <Col>
           <p>
             <strong>{code} {chapter}</strong>:<sub>{verse.verseNum}</sub>
             &nbsp;&nbsp;
-            <span class="english">
-              {verse.enTokens.map((token, index) => this._constructToken(key, index, token, "text"))}
-            </span>
+            {english}
           </p>
           <p>
             <div className="text-right">
               <bdo dir="rtl">
-                <span class="hebrew">
-                  {verse.heTokens.map((token, index) => this._constructToken(key, index, token, "text"))}
-                </span>
+                {hebrew}
               </bdo>
-              <br/>
-              <span class="translit">
-                {verse.heTokens.map((token, index) => this._constructToken(key, index, token, "transliteration"))}
-              </span>
+              {translit}
             </div>
           </p>
         </Col>
