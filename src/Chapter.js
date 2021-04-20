@@ -6,6 +6,8 @@ import React from 'react';
 
 import { withRouter } from "react-router-dom";
 
+import Token from './Token';
+
 
 class Chapter extends React.Component {
   constructor(props) {
@@ -14,14 +16,13 @@ class Chapter extends React.Component {
       name: "",
       chapters: 0,
       verses: [],
-      tokenHighlight: null,
+      clickedCode: null,
     };
-    this._constructVerse = this._constructVerse.bind(this);
-    this._constructToken = this._constructToken.bind(this);
+    this.constructVerse = this.constructVerse.bind(this);
+    this.handleTokenClick = this.handleTokenClick.bind(this);
   }
 
   componentDidMount() {
-    /* Load proper name and chapter info from the api */
     let code = this.props.match.params.code;
     let chapter = this.props.match.params.chapter;
     fetch("https://api.barebonesbible.com/books/" + code)
@@ -30,6 +31,11 @@ class Chapter extends React.Component {
     fetch("https://api.barebonesbible.com/books/" + code + "/" + chapter)
       .then(res => res.json())
       .then(res => this.setState({verses: res.verses}))
+  }
+
+  handleTokenClick(event, code) {
+    event.preventDefault();
+    this.setState({clickedCode: code});
   }
 
   render() {
@@ -50,23 +56,38 @@ class Chapter extends React.Component {
               </h1>
             </Col>
           </Row>
-          {this.state.verses.map(verse => this._constructVerse(code, chapter, verse))}
+          {this.state.verses.map(verse => this.constructVerse(code, chapter, verse))}
         </Container>
       </div>
     )
   }
 
-  _constructVerse(code, chapter, verse) {
+  constructVerse(code, chapter, verse) {
     let key = verse.chapterId + "." + verse.verseNum.toString();
     let english = (
       <span class="english">
-        {verse.enTokens.map((token, index) => this._constructToken(key, index, token, "text"))}
+        {verse.enTokens.map((token, index) =>
+          <Token
+            key={key + "." + index.toString()}
+            code={token.code}
+            text={token.text}
+            type={token.type}
+            clicked={token.code && token.code === this.state.clickedCode}
+            handleClick={this.handleTokenClick}
+          />)}
       </span>
     );
-    let field = (this.props.showCantillations) ? "text" : "text_no_cantillations";
     let hebrew = (
       <span class="hebrew">
-        {verse.heTokens.map((token, index) => this._constructToken(key, index, token, field))}
+        {verse.heTokens.map((token, index) =>
+          <Token
+            key={key + "." + index.toString()}
+            code={token.code}
+            text={this.fixHebrew(token.text)}
+            type={token.type}
+            clicked={token.code && token.code === this.state.clickedCode}
+            handleClick={this.handleTokenClick}
+          />)}
       </span>
     );
     var translit = "";
@@ -74,7 +95,15 @@ class Chapter extends React.Component {
       translit = (
         <span class="translit">
           <br/>
-          {verse.heTokens.map((token, index) => this._constructToken(key, index, token, "transliteration"))}
+          {verse.heTokens.map((token, index) =>
+          <Token
+            key={key + "." + index.toString()}
+            code={token.code}
+            text={token.transliteration}
+            type={token.type}
+            clicked={token.code && token.code === this.state.clickedCode}
+            handleClick={this.handleTokenClick}
+          />)}
         </span>
       );
     }
@@ -96,27 +125,18 @@ class Chapter extends React.Component {
           </p>
         </Col>
       </Row>
-    )
+    );
   }
 
-  _constructToken(verseKey, index, token, field) {
-    let key = verseKey + "." + index.toString();
-    var text = token[field];
-    text = <span onClick={(e) => this._handleClick(e, token.code)}>{text}</span>;
-    if (token.code && token.code === this.state.tokenHighlight) {
-      text = <span className="token-clicked">{text}</span>;
+  fixHebrew(text){
+    if (!this.props.showCantillations) {
+      text = text.replace(/[\u0591-\u05AF]/g,"");
     }
-    if (token.code) {
-      text = <a href="#">{text}</a>;
+    if (!this.props.showNiqqud) {
+      text = text.replace(/[\u05B0-\u05C7]/g,"");
     }
-    return <span key={key} className={"token-" + token.type}>{text}</span>
+    return text;
   }
-
-  _handleClick(event, code) {
-    event.preventDefault();
-    this.setState({tokenHighlight: code});
-  }
-
 }
 
 export default withRouter(Chapter);

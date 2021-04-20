@@ -65,6 +65,12 @@ class NavBar extends React.Component {
                   />
                   <Form.Check
                     type="checkbox"
+                    label="Niqqud"
+                    defaultChecked={this.props.showNiqqud}
+                    onChange={this.props.handleNiqqudClick}
+                  />
+                  <Form.Check
+                    type="checkbox"
                     label="Transliteration"
                     defaultChecked={this.props.showTranslit}
                     onChange={this.props.handleTranslitClick}
