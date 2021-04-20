@@ -1,4 +1,5 @@
 import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Nav from 'react-bootstrap/Nav';
@@ -6,14 +7,18 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import React from 'react';
 
+import { GearFill } from 'react-bootstrap-icons';
+
 
 class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       error: null,
-      collections: []
+      collections: [],
+      translitChecked: true,
     };
+    this.handleTranslitClick = this.handleTranslitClick.bind(this);
   }
 
   componentDidMount() {
@@ -34,6 +39,10 @@ class NavBar extends React.Component {
       )
   }
 
+  handleTranslitClick() {
+    this.setState({translitChecked: !this.state.translitChecked});
+  }
+
   render() {
     const { error, collections } = this.state;
     if (error) {
@@ -45,13 +54,25 @@ class NavBar extends React.Component {
     }
     return (
       <Navbar fixed="top" variant="dark" bg="dark" expand="lg">
-        <Navbar.Brand href="/home">Bare Bones Bible</Navbar.Brand>
+        <Navbar.Brand href="/home">Bare Bones Bible {this.state.translitChecked.toString()}</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             <Nav.Link href="/home">Home</Nav.Link>
             <NavDropdown title="Books" id="basic-nav-dropdown">
               {dropdown}
+            </NavDropdown>
+            <NavDropdown title="Settings">
+              <Container>
+                <Form>
+                  <Form.Check
+                    type="checkbox"
+                    label="Transliteration"
+                    defaultChecked={this.state.translitChecked}
+                    onChange={this.handleTranslitClick}
+                  />
+                </Form>
+              </Container>
             </NavDropdown>
           </Nav>
           <Form inline>
