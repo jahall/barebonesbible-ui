@@ -100,7 +100,7 @@ class Chapter extends React.Component {
           <Token
             key={key + "." + index.toString()}
             code={token.code}
-            text={token.transliteration}
+            text={token.tlit}
             type={token.type}
             clicked={token.code && token.code === this.state.clickedCode}
             handleClick={this.handleTokenClick}

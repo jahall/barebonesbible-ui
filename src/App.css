@@ -42,10 +42,10 @@ body {
 .hebrew a:hover {
   text-shadow: 2px 2px 10px #577590;
 }
-.token-prefix {
+.token-pre {
   color: #277da1;
 }
-.token-suffix {
+.token-suf {
   color: #6b705c;
 }
 .token-punc {
