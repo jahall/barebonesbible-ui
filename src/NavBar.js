@@ -1,5 +1,4 @@
 import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Nav from 'react-bootstrap/Nav';
@@ -37,12 +36,13 @@ class NavBar extends React.Component {
 
   render() {
     const { error, collections } = this.state;
+    var dropdown;
     if (error) {
-      var dropdown = <NavDropdown.Header>Failed to load!</NavDropdown.Header>
+      dropdown = <NavDropdown.Header>Failed to load!</NavDropdown.Header>
     } else if (collections.length === 0) {
-      var dropdown = <NavDropdown.Header>Loading...</NavDropdown.Header>
+      dropdown = <NavDropdown.Header>Loading...</NavDropdown.Header>
     } else {
-      var dropdown = this._renderDropdown(collections)
+      dropdown = this._renderDropdown(collections)
     }
     return (
       <Navbar fixed="top" variant="dark" bg="dark" expand="lg">
@@ -55,7 +55,31 @@ class NavBar extends React.Component {
               {dropdown}
             </NavDropdown>
             <NavDropdown title="Settings">
-              <Container>
+              <NavDropdown.Header>English Translations</NavDropdown.Header>
+              <div style={{paddingLeft: '25px'}}>
+                <Form>
+                  <Form.Group>
+                    <Form.Check
+                      type="radio"
+                      label="KJV"
+                      name="engTranslations"
+                      id="kjv"
+                      defaultChecked={true}
+                      onChange={this.props.handleTranslationClick}
+                    />
+                    <Form.Check
+                      type="radio"
+                      label="WEB"
+                      name="engTranslations"
+                      id="web"
+                      onChange={this.props.handleTranslationClick}
+                    />
+                  </Form.Group>
+                </Form>
+              </div>
+              <NavDropdown.Divider />
+              <NavDropdown.Header>View Options</NavDropdown.Header>
+              <div style={{paddingLeft: '25px'}}>
                 <Form>
                   <Form.Check
                     type="checkbox"
@@ -76,7 +100,7 @@ class NavBar extends React.Component {
                     onChange={this.props.handleTranslitClick}
                   />
                 </Form>
-              </Container>
+              </div>
             </NavDropdown>
           </Nav>
           <Form inline>

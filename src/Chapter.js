@@ -64,9 +64,10 @@ class Chapter extends React.Component {
 
   constructVerse(code, chapter, verse) {
     let key = verse.chapterId + "." + verse.verseNum.toString();
+    var enField = this.props.translation + "Tokens";
     let english = (
       <span class="english">
-        {verse.enTokens.map((token, index) =>
+        {verse[enField].map((token, index) =>
           <Token
             key={key + "." + index.toString()}
             code={token.code}
@@ -79,7 +80,7 @@ class Chapter extends React.Component {
     );
     let hebrew = (
       <span class="hebrew">
-        {verse.heTokens.map((token, index) =>
+        {verse.wlcTokens.map((token, index) =>
           <Token
             key={key + "." + index.toString()}
             code={token.code}
@@ -95,7 +96,7 @@ class Chapter extends React.Component {
       translit = (
         <span class="translit">
           <br/>
-          {verse.heTokens.map((token, index) =>
+          {verse.wlcTokens.map((token, index) =>
           <Token
             key={key + "." + index.toString()}
             code={token.code}
