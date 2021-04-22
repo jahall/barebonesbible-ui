@@ -3,14 +3,14 @@ import React from 'react';
 
 class Token extends React.Component {
     render() {
-      var code = this.props.code;
+      var strongs = this.props.strongs;
       var type = this.props.type;
       var text = this.props.text;
-      text = <span onClick={(e) => this.props.handleClick(e, code)}>{text}</span>;
+      text = <span onClick={(e) => this.props.handleClick(e, strongs)}>{text}</span>;
       if (this.props.clicked) {
         text = <span className="token-clicked">{text}</span>;
       }
-      if (code) {
+      if (strongs) {
         text = <a href="#">{text}</a>;
       }
       return <span className={"token-" + type}>{text}</span>

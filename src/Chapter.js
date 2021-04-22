@@ -16,7 +16,7 @@ class Chapter extends React.Component {
       name: "",
       chapters: 0,
       verses: [],
-      clickedCode: null,
+      clickedCodes: [],
     };
     this.constructVerse = this.constructVerse.bind(this);
     this.handleTokenClick = this.handleTokenClick.bind(this);
@@ -33,9 +33,9 @@ class Chapter extends React.Component {
       .then(res => this.setState({verses: res.verses}))
   }
 
-  handleTokenClick(event, code) {
+  handleTokenClick(event, codes) {
     event.preventDefault();
-    this.setState({clickedCode: code});
+    this.setState({clickedCodes: codes});
   }
 
   render() {
@@ -70,10 +70,10 @@ class Chapter extends React.Component {
         {verse[enField].map((token, index) =>
           <Token
             key={key + "." + index.toString()}
-            code={token.code}
+            strongs={token.strongs}
             text={token.text}
             type={token.type}
-            clicked={token.code && token.code === this.state.clickedCode}
+            clicked={token.strongs && token.strongs.some(r=> this.state.clickedCodes.includes(r))}
             handleClick={this.handleTokenClick}
           />)}
       </span>
@@ -83,10 +83,10 @@ class Chapter extends React.Component {
         {verse.wlcTokens.map((token, index) =>
           <Token
             key={key + "." + index.toString()}
-            code={token.code}
+            strongs={token.strongs}
             text={this.fixHebrew(token.text)}
             type={token.type}
-            clicked={token.code && token.code === this.state.clickedCode}
+            clicked={token.strongs && token.strongs.some(r=> this.state.clickedCodes.includes(r))}
             handleClick={this.handleTokenClick}
           />)}
       </span>
@@ -99,10 +99,10 @@ class Chapter extends React.Component {
           {verse.wlcTokens.map((token, index) =>
           <Token
             key={key + "." + index.toString()}
-            code={token.code}
+            strongs={token.strongs}
             text={token.tlit}
             type={token.type}
-            clicked={token.code && token.code === this.state.clickedCode}
+            clicked={token.strongs && token.strongs.some(r=> this.state.clickedCodes.includes(r))}
             handleClick={this.handleTokenClick}
           />)}
         </span>

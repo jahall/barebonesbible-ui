@@ -39,6 +39,10 @@ body {
   color: black;
   text-decoration: none;  /* Avoid underline on hover */
 }
+.english a {
+  color: black;
+  text-decoration: none;  /* Avoid underline on hover */
+}
 .hebrew a:hover {
   text-shadow: 2px 2px 10px #577590;
 }

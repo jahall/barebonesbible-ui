@@ -74,6 +74,13 @@ class NavBar extends React.Component {
                       id="web"
                       onChange={this.props.handleTranslationClick}
                     />
+                    <Form.Check
+                      type="radio"
+                      label="WMB"
+                      name="engTranslations"
+                      id="wmb"
+                      onChange={this.props.handleTranslationClick}
+                    />
                   </Form.Group>
                 </Form>
               </div>
