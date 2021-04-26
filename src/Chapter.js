@@ -56,6 +56,7 @@ class Chapter extends React.Component {
                 { this.state.name } { chapter }
                 <Button className="float-right" variant="outline-dark" href={nextChapterLink} disabled={chapter === lastChapter}>&raquo;</Button>
               </h1>
+              <br/>
             </Col>
           </Row>
           {this.state.verses.map(verse => this.constructVerse(code, chapter, verse))}
@@ -81,7 +82,7 @@ class Chapter extends React.Component {
   }
 
   constructEnglish(code, chapter, verse) {
-    const selected = this.props.translations;
+    const selected = this.props.enTranslations;
     const translations = verse.translations.filter(elem => elem.lan === "en" && selected.includes(elem.translation.toLowerCase()));
     if (translations.length === 0) {
       return null;

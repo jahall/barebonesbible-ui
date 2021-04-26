@@ -44,18 +44,18 @@ class NavBar extends React.Component {
     } else {
       dropdown = this._renderDropdown(collections)
     }
-    const translations = [
+    const enTranslations = [
       {"id": "asv", "name": "ASV"},
       {"id": "kjv", "name": "KJV"},
       {"id": "web", "name": "WEB"},
       {"id": "wmb", "name": "WMB"},
     ];
-    const translationOptions = translations.map(t => (
+    const translationOptions = enTranslations.map(t => (
       <Form.Check
         type="checkbox"
         label={t.name}
         id={t.id}
-        defaultChecked={this.props.translations.includes(t.id)}
+        defaultChecked={this.props.enTranslations.includes(t.id)}
         onChange={this.props.handleTranslationClick}
       />
     ))

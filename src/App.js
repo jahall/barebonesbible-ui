@@ -3,6 +3,7 @@ import './App.css';
 import Book from './Book';
 import Chapter from './Chapter';
 import Home from './Home';
+import ls from 'local-storage';
 import NavBar from './NavBar';
 import React from 'react';
 import {
@@ -12,14 +13,24 @@ import {
 } from "react-router-dom";
 
 
+function fetch(field, def) {
+  /* Fetch value from local storage...or return default */
+  var value = ls.get(field);
+  if (value === undefined) {
+    value = def;
+  }
+  return value;
+}
+
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      translations: ["kjv", "wlc", "tisch"],
-      showCantillations: false,  /* toggle for showing cantillations */
-      showNiqqud: true,  /* toggle for showing niqqud */
-      showTranslit: true,  /* toggle for showing transliteration */
+      enTranslations: fetch("enTranslations", ["web"]),
+      showCantillations: fetch("showCantillations", false),  /* toggle for showing cantillations */
+      showNiqqud: fetch("showNiqqud", true),  /* toggle for showing niqqud */
+      showTranslit: fetch("showTranslit", true),  /* toggle for showing transliteration */
     };
     this.handleTranslationClick = this.handleTranslationClick.bind(this);
     this.handleCantillationsClick = this.handleCantillationsClick.bind(this);
@@ -29,26 +40,34 @@ class App extends React.Component {
 
   handleTranslationClick(event) {
     const translation = event.target.id;
-    console.log(translation);
-    const index = this.state.translations.indexOf(translation);
-    var translations = this.state.translations;
+    const enTranslations = this.state.enTranslations;
+    const index = enTranslations.indexOf(translation);
+    var newEnTranslations;
     if (index > -1) {  /* translation is currently selected and should be removed */
-      this.setState({translations: translations.filter((_, i) => i !== index)})
+      newEnTranslations = enTranslations.filter((_, i) => i !== index);
     } else {  /* translation is not selected and should be added */
-      this.setState(state => ({translations: [...state.translations, translation]}))
+      newEnTranslations = [...enTranslations, translation];
     }
+    this.setState({enTranslations: newEnTranslations});
+    ls.set("enTranslations", newEnTranslations);
   }
 
   handleCantillationsClick() {
-    this.setState({showCantillations: !this.state.showCantillations});
+    const newShow = !this.state.showCantillations;
+    this.setState({showCantillations: newShow});
+    ls.set("showCantillations", newShow);
   }
 
   handleNiqqudClick() {
-    this.setState({showNiqqud: !this.state.showNiqqud});
+    const newShow = !this.state.showNiqqud;
+    this.setState({showNiqqud: newShow});
+    ls.set("showNiqqud", newShow);
   }
 
   handleTranslitClick() {
-    this.setState({showTranslit: !this.state.showTranslit});
+    const newShow = !this.state.showTranslit;
+    this.setState({showTranslit: newShow});
+    ls.set("showTranslit", newShow);
   }
 
   render() {
@@ -56,7 +75,7 @@ class App extends React.Component {
       <div className="App">
         <Router>
           <NavBar
-            translations={this.state.translations}
+            enTranslations={this.state.enTranslations}
             showCantillations={this.state.showCantillations}
             showNiqqud={this.state.showNiqqud}
             showTranslit={this.state.showTranslit}
@@ -68,7 +87,7 @@ class App extends React.Component {
           <Switch>
             <Route path="/books/:code/:chapter" children={
               <Chapter
-                translations={this.state.translations}
+                enTranslations={this.state.enTranslations}
                 showCantillations={this.state.showCantillations}
                 showNiqqud={this.state.showNiqqud}
                 showTranslit={this.state.showTranslit}
