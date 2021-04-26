@@ -44,6 +44,21 @@ class NavBar extends React.Component {
     } else {
       dropdown = this._renderDropdown(collections)
     }
+    const translations = [
+      {"id": "asv", "name": "ASV"},
+      {"id": "kjv", "name": "KJV"},
+      {"id": "web", "name": "WEB"},
+      {"id": "wmb", "name": "WMB"},
+    ];
+    const translationOptions = translations.map(t => (
+      <Form.Check
+        type="checkbox"
+        label={t.name}
+        id={t.id}
+        defaultChecked={this.props.translations.includes(t.id)}
+        onChange={this.props.handleTranslationClick}
+      />
+    ))
     return (
       <Navbar fixed="top" variant="dark" bg="dark" expand="lg">
         <Navbar.Brand href="/home">Bare Bones Bible</Navbar.Brand>
@@ -58,30 +73,7 @@ class NavBar extends React.Component {
               <NavDropdown.Header>English Translations</NavDropdown.Header>
               <div style={{paddingLeft: '25px'}}>
                 <Form>
-                  <Form.Group>
-                    <Form.Check
-                      type="radio"
-                      label="KJV"
-                      name="engTranslations"
-                      id="kjv"
-                      defaultChecked={true}
-                      onChange={this.props.handleTranslationClick}
-                    />
-                    <Form.Check
-                      type="radio"
-                      label="WEB"
-                      name="engTranslations"
-                      id="web"
-                      onChange={this.props.handleTranslationClick}
-                    />
-                    <Form.Check
-                      type="radio"
-                      label="WMB"
-                      name="engTranslations"
-                      id="wmb"
-                      onChange={this.props.handleTranslationClick}
-                    />
-                  </Form.Group>
+                  {translationOptions}
                 </Form>
               </div>
               <NavDropdown.Divider />

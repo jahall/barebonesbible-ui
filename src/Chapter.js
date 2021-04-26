@@ -35,7 +35,9 @@ class Chapter extends React.Component {
 
   handleTokenClick(event, codes) {
     event.preventDefault();
-    this.setState({clickedCodes: codes});
+    if (typeof codes !== 'undefined') {
+      this.setState({clickedCodes: codes});
+    }
   }
 
   render() {
@@ -64,49 +66,47 @@ class Chapter extends React.Component {
 
   constructVerse(code, chapter, verse) {
     let key = verse.chapterId + "." + verse.verseNum.toString();
-    var enField = this.props.translation + "Tokens";
-    let english = (
-      <span class="english">
-        {verse[enField].map((token, index) =>
-          <Token
-            key={key + "." + index.toString()}
-            strongs={token.strongs}
-            text={token.text}
-            type={token.type}
-            clicked={token.strongs && token.strongs.some(r=> this.state.clickedCodes.includes(r))}
-            handleClick={this.handleTokenClick}
-          />)}
-      </span>
+    let english = this.constructEnglish(code, chapter, verse);
+    return (
+      <Row key={key} lg={1}>
+        <Col>
+          {english}
+        </Col>
+      </Row>
     );
-    let hebrew = (
-      <span class="hebrew">
-        {verse.wlcTokens.map((token, index) =>
-          <Token
-            key={key + "." + index.toString()}
-            strongs={token.strongs}
-            text={this.fixHebrew(token.text)}
-            type={token.type}
-            clicked={token.strongs && token.strongs.some(r=> this.state.clickedCodes.includes(r))}
-            handleClick={this.handleTokenClick}
-          />)}
-      </span>
-    );
+    {/*
+    var hebrew = "";
     var translit = "";
-    if (this.props.showTranslit) {
-      translit = (
-        <span class="translit">
-          <br/>
-          {verse.wlcTokens.map((token, index) =>
-          <Token
-            key={key + "." + index.toString()}
-            strongs={token.strongs}
-            text={token.tlit}
-            type={token.type}
-            clicked={token.strongs && token.strongs.some(r=> this.state.clickedCodes.includes(r))}
-            handleClick={this.handleTokenClick}
-          />)}
+    if (typeof verse.hewlcTokens !== 'undefined') {
+      hebrew = (
+        <span class="hebrew">
+          {verse.hewlcTokens.map((token, index) =>
+            <Token
+              key={key + "." + index.toString()}
+              strongs={token.strongs}
+              text={this.fixHebrew(token.text)}
+              type={token.type}
+              clicked={token.strongs && token.strongs.some(r=> this.state.clickedCodes.includes(r))}
+              handleClick={this.handleTokenClick}
+            />)}
         </span>
       );
+      if (this.props.showTranslit) {
+        translit = (
+          <span class="translit">
+            <br/>
+            {verse.hewlcTokens.map((token, index) =>
+            <Token
+              key={key + "." + index.toString()}
+              strongs={token.strongs}
+              text={token.tlit}
+              type={token.type}
+              clicked={token.strongs && token.strongs.some(r=> this.state.clickedCodes.includes(r))}
+              handleClick={this.handleTokenClick}
+            />)}
+          </span>
+        );
+      }
     }
     return (
       <Row key={key} lg={1}>
@@ -126,6 +126,38 @@ class Chapter extends React.Component {
           </p>
         </Col>
       </Row>
+    );*/}
+  }
+
+  constructEnglish(code, chapter, verse) {
+    const selected = this.props.translations;
+    const translations = verse.translations.filter(elem => elem.lan === "en" && selected.includes(elem.translation.toLowerCase()));
+    if (translations.length === 0) {
+      return ""
+    }
+    const showTr = (translations.length === 1) ? (tr) => "" : (tr) => <sub>({tr})</sub>;
+    return (
+      <p>
+        {translations
+          .map(tr => (
+            <>
+              <strong>{code} {chapter}</strong>:{verse.verseNum}{showTr(tr.translation)}
+              &nbsp;&nbsp;
+              <span class="english">
+                {tr.tokens.map((token, index) =>
+                  <Token
+                    key={index}
+                    strongs={token.strongs}
+                    text={token.text}
+                    type={token.type}
+                    clicked={token.strongs && token.strongs.some(r=> this.state.clickedCodes.includes(r))}
+                    handleClick={this.handleTokenClick}
+                  />)}
+              </span>
+            </>
+        ))
+        .reduce((prev, curr) => [prev, <br/>, curr])}
+      </p>
     );
   }
 

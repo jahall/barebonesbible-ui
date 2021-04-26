@@ -10,10 +10,10 @@ class Token extends React.Component {
       if (this.props.clicked) {
         text = <span className="token-clicked">{text}</span>;
       }
-      if (strongs) {
+      if (typeof strongs !== 'undefined' && strongs.length > 0) {
         text = <a href="#">{text}</a>;
       }
-      return <span className={"token-" + type}>{text}</span>
+      return <span className={"token-" + type}>{text}</span>;
     }
   }
   

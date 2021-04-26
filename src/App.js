@@ -16,7 +16,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      translation: "kjv",
+      translations: ["kjv", "wlc", "tisch"],
       showCantillations: false,  /* toggle for showing cantillations */
       showNiqqud: true,  /* toggle for showing niqqud */
       showTranslit: true,  /* toggle for showing transliteration */
@@ -28,7 +28,15 @@ class App extends React.Component {
   }
 
   handleTranslationClick(event) {
-    this.setState({translation: event.target.id})
+    const translation = event.target.id;
+    console.log(translation);
+    const index = this.state.translations.indexOf(translation);
+    var translations = this.state.translations;
+    if (index > -1) {  /* translation is currently selected and should be removed */
+      this.setState({translations: translations.filter((_, i) => i !== index)})
+    } else {  /* translation is not selected and should be added */
+      this.setState(state => ({translations: [...state.translations, translation]}))
+    }
   }
 
   handleCantillationsClick() {
@@ -48,7 +56,7 @@ class App extends React.Component {
       <div className="App">
         <Router>
           <NavBar
-            translation={this.state.translation}
+            translations={this.state.translations}
             showCantillations={this.state.showCantillations}
             showNiqqud={this.state.showNiqqud}
             showTranslit={this.state.showTranslit}
@@ -60,7 +68,7 @@ class App extends React.Component {
           <Switch>
             <Route path="/books/:code/:chapter" children={
               <Chapter
-                translation={this.state.translation}
+                translations={this.state.translations}
                 showCantillations={this.state.showCantillations}
                 showNiqqud={this.state.showNiqqud}
                 showTranslit={this.state.showTranslit}
