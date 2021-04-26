@@ -67,75 +67,26 @@ class Chapter extends React.Component {
   constructVerse(code, chapter, verse) {
     let key = verse.chapterId + "." + verse.verseNum.toString();
     let english = this.constructEnglish(code, chapter, verse);
+    let hebrew = this.constructForeign(code, chapter, verse, "hebrew");
+    let greek = this.constructForeign(code, chapter, verse, "greek");
     return (
       <Row key={key} lg={1}>
         <Col>
           {english}
+          {hebrew}
+          {greek}
         </Col>
       </Row>
     );
-    {/*
-    var hebrew = "";
-    var translit = "";
-    if (typeof verse.hewlcTokens !== 'undefined') {
-      hebrew = (
-        <span class="hebrew">
-          {verse.hewlcTokens.map((token, index) =>
-            <Token
-              key={key + "." + index.toString()}
-              strongs={token.strongs}
-              text={this.fixHebrew(token.text)}
-              type={token.type}
-              clicked={token.strongs && token.strongs.some(r=> this.state.clickedCodes.includes(r))}
-              handleClick={this.handleTokenClick}
-            />)}
-        </span>
-      );
-      if (this.props.showTranslit) {
-        translit = (
-          <span class="translit">
-            <br/>
-            {verse.hewlcTokens.map((token, index) =>
-            <Token
-              key={key + "." + index.toString()}
-              strongs={token.strongs}
-              text={token.tlit}
-              type={token.type}
-              clicked={token.strongs && token.strongs.some(r=> this.state.clickedCodes.includes(r))}
-              handleClick={this.handleTokenClick}
-            />)}
-          </span>
-        );
-      }
-    }
-    return (
-      <Row key={key} lg={1}>
-        <Col>
-          <p>
-            <strong>{code} {chapter}</strong>:<sub>{verse.verseNum}</sub>
-            &nbsp;&nbsp;
-            {english}
-          </p>
-          <p>
-            <div className="text-right">
-              <bdo dir="rtl">
-                {hebrew}
-              </bdo>
-              {translit}
-            </div>
-          </p>
-        </Col>
-      </Row>
-    );*/}
   }
 
   constructEnglish(code, chapter, verse) {
     const selected = this.props.translations;
     const translations = verse.translations.filter(elem => elem.lan === "en" && selected.includes(elem.translation.toLowerCase()));
     if (translations.length === 0) {
-      return ""
+      return null;
     }
-    const showTr = (translations.length === 1) ? (tr) => "" : (tr) => <sub>({tr})</sub>;
+    const showTr = (translations.length === 1) ? (tr) => "" : (tr) => <span class="en-version">({tr})</span>;
     return (
       <p>
         {translations
@@ -143,14 +94,14 @@ class Chapter extends React.Component {
             <>
               <strong>{code} {chapter}</strong>:{verse.verseNum}{showTr(tr.translation)}
               &nbsp;&nbsp;
-              <span class="english">
+              <span className="english hover">
                 {tr.tokens.map((token, index) =>
                   <Token
                     key={index}
                     strongs={token.strongs}
                     text={token.text}
                     type={token.type}
-                    clicked={token.strongs && token.strongs.some(r=> this.state.clickedCodes.includes(r))}
+                    clickedCodes={this.state.clickedCodes}
                     handleClick={this.handleTokenClick}
                   />)}
               </span>
@@ -161,7 +112,58 @@ class Chapter extends React.Component {
     );
   }
 
-  fixHebrew(text){
+  constructForeign(code, chapter, verse, lan) {
+    const lanCode = lan.substring(0, 2);
+    const translations = verse.translations.filter(elem => elem.lan === lanCode);
+    if (translations.length === 0) {
+      return null;
+    }
+    var textDir = "left";
+    var bdo = "ltr";
+    if (lan === "hebrew") {
+      textDir = "right";
+      bdo = "rtl";
+    }
+    return (
+      <p>
+        {translations
+          .map(tr => (
+            <div className={"text-" + textDir}>
+              <bdo dir={bdo}>
+                <span className={lan + " hover"}>
+                  {tr.tokens.map((token, index) =>
+                    <Token
+                      key={index}
+                      strongs={token.strongs}
+                      text={this.fixForeign(token.text)}
+                      type={token.type}
+                      clickedCodes={this.state.clickedCodes}
+                      handleClick={this.handleTokenClick}
+                    />)}
+                </span>
+              </bdo>
+              {(!this.props.showTranslit) ? null : (
+                <span className="translit">
+                  <br/>
+                  {tr.tokens.map((token, index) =>
+                  <Token
+                    key={index}
+                    strongs={token.strongs}
+                    text={token.tlit}
+                    type={token.type}
+                    clickedCodes={this.state.clickedCodes}
+                    handleClick={this.handleTokenClick}
+                  />)}
+                </span>
+              )}
+            </div>
+        ))
+        .reduce((prev, curr) => [prev, <br/>, curr])}
+      </p>
+    );
+  }
+
+  fixForeign(text){
     if (!this.props.showCantillations) {
       text = text.replace(/[\u0591-\u05AF]/g,"");
     }
