@@ -51,7 +51,7 @@ class Chapter extends React.Component {
         <Container>
           <Row lg={1}>
             <Col>
-              <h1 class="mt-5" align="center">
+              <h1 className="mt-5" align="center">
                 <Button className="float-left" variant="outline-dark" href={prevChapterLink} disabled={chapter === 1}>&laquo;</Button>
                 { this.state.name } { chapter }
                 <Button className="float-right" variant="outline-dark" href={nextChapterLink} disabled={chapter === lastChapter}>&raquo;</Button>
@@ -83,17 +83,19 @@ class Chapter extends React.Component {
 
   constructEnglish(code, chapter, verse) {
     const selected = this.props.enTranslations;
-    const translations = verse.translations.filter(elem => elem.lan === "en" && selected.includes(elem.translation.toLowerCase()));
+    const translations = verse.translations.filter(
+      elem => elem.lan === "en" && selected.includes(elem.translation.toLowerCase())
+    );
     if (translations.length === 0) {
       return null;
     }
-    const showTr = (translations.length === 1) ? (tr) => "" : (tr) => <span class="en-version">({tr})</span>;
+    const showTr = (translations.length === 1) ? (tr) => "" : (tr) => <span className="en-version">({tr})</span>;
     return (
       <p>
         {translations
           .map(tr => (
             <>
-              <strong>{code} {chapter}</strong>:{verse.verseNum}{showTr(tr.translation)}
+              <strong>{code} {chapter}:{verse.verseNum}</strong>{showTr(tr.translation)}
               &nbsp;&nbsp;
               <span className="english hover">
                 {tr.tokens.map((token, index) =>

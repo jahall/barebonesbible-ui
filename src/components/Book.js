@@ -35,19 +35,19 @@ class Book extends React.Component {
   render() {
     let chapters = Array.from({length: this.state.chapters}, (_, i) => i + 1)
     return (
-      <div className="book">
-        <Container>
-          <Row lg={1}>
-            <h1 class="mt-5">{ this.state.name }</h1>
-          </Row>
-          <hr />
-          <Row>
-            <Col>
-              {chapters.map((chapter) => this._toButton(chapter))}
-            </Col>
-          </Row>
-        </Container>
-      </div>
+      <Container>
+        <Row lg={1}>
+          <Col>
+            <h1 className="mt-5" align="center">{this.state.name}</h1>
+          </Col>
+        </Row>
+        <hr />
+        <Row>
+          <Col>
+            {chapters.map((chapter) => this._toButton(chapter))}
+          </Col>
+        </Row>
+      </Container>
     )
   }
 

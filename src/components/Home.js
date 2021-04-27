@@ -1,4 +1,4 @@
-import scrolls from './images/scrolls.jpg';
+import scrolls from '../images/scrolls.jpg';
 
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -25,7 +25,7 @@ function Home() {
       <Container>
         <Row lg={3} md={1}>
           <Col>
-            <h2 class="mt-1">Why?</h2>
+            <h2 className="mt-1">Why?</h2>
             <p>
               <strong>Why use this?</strong> B<sup>3</sup> allows you to engage directly with the raw Hebrew
               (the bare bones) of the scriptures. But, for those of us who don't speak Hebrew, every word is clickable,
@@ -34,7 +34,7 @@ function Home() {
             </p>
           </Col>
           <Col>
-            <h2 class="mt-1">How?</h2>
+            <h2 className="mt-1">How?</h2>
             <p>
               <strong>How do I use it?</strong> You can use the Books dropdown to go to a specific chapter or use
               the search bar to look up a specific passage. <a href="search?text=Jer+31:31-34">Try now!</a> In addition,
@@ -43,7 +43,7 @@ function Home() {
             </p>
           </Col>
           <Col>
-            <h2 class="mt-1">Who?</h2>
+            <h2 className="mt-1">Who?</h2>
             <p>
               <strong>Who is this for?</strong> This tool is for all budding Bible scholars who are tired of using
               ugly Bible search applications and want a fresh way to engage with the original language of the scriptures.
@@ -53,7 +53,7 @@ function Home() {
         </Row>
         <Row lg={1}>
           <Col>
-            <h2 class="mt-3">About</h2>
+            <h2 className="mt-3">About</h2>
             <p>
               <strong>My name is Joe.</strong> I like maths, being outside, programming and Jesus. I decided to
               build B<sup>3</sup> as a gift for my primary user and great encourager: my dad! However, once I finished

@@ -1,4 +1,4 @@
-import './App.css';
+import '../App.css';
 
 import Book from './Book';
 import Chapter from './Chapter';

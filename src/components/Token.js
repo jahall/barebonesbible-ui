@@ -1,7 +1,10 @@
 import React from 'react';
 
 
-const toIgnore = ["and", "the", "were"];
+const toIgnore = [
+  "and", "at", "be", "is", "has", "he", "her", "his", "my",
+  "of", "on", "she", "the", "to", "were", "will", "would", "your",
+];
 
 
 class Token extends React.Component {
