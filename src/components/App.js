@@ -3,8 +3,10 @@ import '../App.css';
 import Book from './Book';
 import Chapter from './Chapter';
 import Home from './Home';
-import ls from 'local-storage';
 import NavBar from './NavBar';
+import Search from './Search';
+
+import ls from 'local-storage';
 import React from 'react';
 import {
   BrowserRouter as Router,
@@ -94,6 +96,7 @@ class App extends React.Component {
               />
             } />
             <Route path="/books/:code" children={<Book />} />
+            <Route path="/search" children={<Search />} />
             <Route path="/home" children={<Home />} />
             <Route path="/" children={<Home />} />
           </Switch>

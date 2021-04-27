@@ -102,9 +102,9 @@ class NavBar extends React.Component {
               </div>
             </NavDropdown>
           </Nav>
-          <Form inline>
-            <FormControl type="text" placeholder="Verse or Phrase" className="mr-sm-2" />
-            <Button variant="outline-success">Search</Button>
+          <Form inline action="/search">
+            <FormControl type="text" name="query" placeholder="Passage" className="mr-sm-2" />
+            <Button type="submit" variant="primary">Search</Button>
           </Form>
         </Navbar.Collapse>
       </Navbar>
