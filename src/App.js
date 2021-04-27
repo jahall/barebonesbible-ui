@@ -16,7 +16,7 @@ import {
 function fetch(field, def) {
   /* Fetch value from local storage...or return default */
   var value = ls.get(field);
-  if (value === undefined) {
+  if (value === undefined || value === null) {
     value = def;
   }
   return value;

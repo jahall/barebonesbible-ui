@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const toIgnore = ["and", "the"];
+const toIgnore = ["and", "the", "were"];
 
 
 class Token extends React.Component {
