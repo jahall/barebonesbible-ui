@@ -35,10 +35,10 @@ class Book extends React.Component {
   render() {
     let chapters = Array.from({length: this.state.chapters}, (_, i) => i + 1)
     return (
-      <Container>
+      <Container className="text-center">
         <Row lg={1}>
           <Col>
-            <h1 className="mt-5" align="center">{this.state.name}</h1>
+            <h1 className="mt-5">{this.state.name}</h1>
           </Col>
         </Row>
         <hr />

@@ -15,10 +15,10 @@ function Home() {
           <h1 className="display-3">Hello!</h1>
           <p className="lead">
             The Bare Bones Bible (B<sup>3</sup>) is an awesome tool to help you engage with the ancient texts of the scriptures.
-            Enjoy browsing by book or looking up words (in progress...).
+            Enjoy browsing by book or looking up a passage.
           </p>
           <p>
-            <Button variant="primary">Learn more</Button>
+            <Button variant="primary" href="/books/Gen/1">Dive In!</Button>
           </p>
         </Container>
       </Jumbotron>
@@ -37,7 +37,7 @@ function Home() {
             <h2 className="mt-1">How?</h2>
             <p>
               <strong>How do I use it?</strong> You can use the Books dropdown to go to a specific chapter or use
-              the search bar to look up a specific passage. <a href="search?text=Jer+31:31-34">Try now!</a>
+              the search bar to look up a specific passage. <a href="search?query=Jer+31:31-34">Try now!</a>
             </p>
           </Col>
           <Col>
