@@ -108,8 +108,10 @@ class Passage extends React.Component {
           verse={verse}
           enTranslations={this.props.enTranslations}
           clickedCodes={this.state.clickedCodes}
-          showTranslit={this.props.showTranslit}
           handleTokenClick={this.handleTokenClick}
+          showCantillations={this.props.showCantillations}
+          showNiqqud={this.props.showNiqqud}
+          showTranslit={this.props.showTranslit}
         />
       ));
     }
