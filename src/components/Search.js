@@ -3,60 +3,82 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import React from 'react';
+import Spinner from 'react-bootstrap/Spinner';
 import { Redirect, withRouter } from "react-router-dom";
 import qs from 'qs';
 
+import { normalize } from "./aliases";
+
 
 class Search extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      bookAliases: null,
-    };
-  }
-
-  async componentDidMount() {
-    const collections = await fetch("https://api.barebonesbible.com/books").then(res => res.json());
-    const bookAliases = this.createBookAliases(collections);
-    this.setState({bookAliases: bookAliases})
-  }
-
-  createBookAliases(collections) {
-    var bookAliases = {};
-    for (const item of collections) {
-      for (const book of item.books) {
-        bookAliases[normalize(book.code)] = book.code;
-        bookAliases[normalize(book.name)] = book.code;
-        for (const alias of book.aliases) {
-          bookAliases[normalize(alias)] = book.code;
-        }
-      }
-    }
-    return bookAliases;
-  }
-
   /*
   This helped me understand why useLocation was not working!
   https://stackoverflow.com/questions/35352638/react-how-to-get-parameter-value-from-query-string/48256676#48256676
   */
   render() {
-    if (this.state.bookAliases === null) {
-      return this.info(<h3 className="mt-5">Searching...</h3>);
-    }
-    let query = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).query;
-    let book = this.state.bookAliases[normalize(query)];
-    if (book === undefined) {
+    var book;
+    var match;
+    /* Alias list not loaded yet */
+    const bookAliases = this.props.bookAliases;
+    if (bookAliases === null) {
       return this.info(
         <>
-          <h3 className="mt-5">Couldn't find anything for<br/>"<strong>{query}</strong>"</h3>
-          <br/>
-          <p><Button variant="primary" href="/home">Take me home</Button></p>
+          <br/><br/><br/><br/>
+          <Spinner animation="border" role="status">
+            <span className="sr-only">Loading...</span>
+          </Spinner>
         </>
       );
     }
-    return (
-      <Redirect to={"/books/" + book} />
-    )
+    /* Fetch user search string */
+    let query = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).query.trim();
+    /* 1. Did they search for a book? */
+    book = bookAliases[normalize(query)];
+    if (book !== undefined) {
+      return <Redirect to={"/books/" + book} />;
+    }
+    /* 2. Did they search for a specific chapter */
+    match = query.match(/^([\w\s]+[a-z])\s*(\d+)$/i);
+    if (match !== null) {
+      book = bookAliases[normalize(match[1])];
+      if (book !== undefined) {
+        return <Redirect to={"/books/" + book + "/" + match[2]} />;
+      }
+    }
+    var cv1;
+    var cv2;
+    /* 3. Did they search for a specific verse */
+    match = query.match(/^([\w\s]+[a-z])\s*(\d+)\s*:(\d+)$/i);
+    if (match !== null) {
+      book = bookAliases[normalize(match[1])];
+      cv1 = match[2] + "." + match[3];
+      cv2 = cv1;
+    }
+    /* 4. Did they search for a range of verses (within a chapter) */
+    match = query.match(/^([\w\s]+[a-z])\s*(\d+)\s*:\s*(\d+)\s*-\s*(\d+)$/i);
+    if (match !== null) {
+      book = bookAliases[normalize(match[1])];
+      cv1 = match[2] + "." + match[3];
+      cv2 = match[2] + "." + match[4];
+    }
+    /* 5. Did they search for a range of verses (across chapters) */
+    match = query.match(/^([\w\s]+[a-z])\s*(\d+)\s*:\s*(\d+)\s*-\s*(\d+)\s*:\s*(\d+)$/i);
+    if (match !== null) {
+      book = bookAliases[normalize(match[1])];
+      cv1 = match[2] + "." + match[3];
+      cv2 = match[4] + "." + match[5];
+    }
+    if (book !== undefined) {
+      return <Redirect to={"/books/" + book + "/" + cv1 + "/" + cv2} />;
+    }
+    /* Didn't get anything */
+    return this.info(
+      <>
+        <h3 className="mt-5">Couldn't find anything for<br/>"<strong>{query}</strong>"</h3>
+        <br/>
+        <p><Button variant="primary" href="/home">Take me home</Button></p>
+      </>
+    );
   }
 
   info(message) {
@@ -70,10 +92,6 @@ class Search extends React.Component {
       </Container>
     )
   }
-}
-
-function normalize(alias) {
-  return alias.toLowerCase().replace(/\s/g, "");
 }
   
 export default withRouter(Search);

@@ -1,10 +1,11 @@
 import '../App.css';
 
 import Book from './Book';
-import Chapter from './Chapter';
 import Home from './Home';
 import NavBar from './NavBar';
+import Passage from './Passage';
 import Search from './Search';
+import { createBookAliases } from './aliases';
 
 import ls from 'local-storage';
 import React from 'react';
@@ -15,8 +16,8 @@ import {
 } from "react-router-dom";
 
 
-function fetch(field, def) {
-  /* Fetch value from local storage...or return default */
+function load(field, def) {
+  /* Load value from local storage...or return default */
   var value = ls.get(field);
   if (value === undefined || value === null) {
     value = def;
@@ -29,15 +30,27 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      enTranslations: fetch("enTranslations", ["web"]),
-      showCantillations: fetch("showCantillations", false),  /* toggle for showing cantillations */
-      showNiqqud: fetch("showNiqqud", true),  /* toggle for showing niqqud */
-      showTranslit: fetch("showTranslit", true),  /* toggle for showing transliteration */
+      collections: null,
+      bookAliases: null,
+      enTranslations: load("enTranslations", ["web"]),
+      showCantillations: load("showCantillations", false),  /* toggle for showing cantillations */
+      showNiqqud: load("showNiqqud", true),  /* toggle for showing niqqud */
+      showTranslit: load("showTranslit", true),  /* toggle for showing transliteration */
     };
     this.handleTranslationClick = this.handleTranslationClick.bind(this);
     this.handleCantillationsClick = this.handleCantillationsClick.bind(this);
     this.handleNiqqudClick = this.handleNiqqudClick.bind(this);
     this.handleTranslitClick = this.handleTranslitClick.bind(this);
+  }
+
+  async componentDidMount() {
+    /* Load dropdown menu from the api */
+    const collections = await fetch("https://api.barebonesbible.com/books").then(res => res.json());
+    const bookAliases = createBookAliases(collections);
+    this.setState({
+      collections: collections,
+      bookAliases: bookAliases,
+    })
   }
 
   handleTranslationClick(event) {
@@ -77,6 +90,7 @@ class App extends React.Component {
       <div className="App">
         <Router>
           <NavBar
+            collections={this.state.collections}
             enTranslations={this.state.enTranslations}
             showCantillations={this.state.showCantillations}
             showNiqqud={this.state.showNiqqud}
@@ -87,8 +101,16 @@ class App extends React.Component {
             handleTranslitClick={this.handleTranslitClick}
           />
           <Switch>
+            <Route path="/books/:code/:start/:end" children={
+              <Passage
+                enTranslations={this.state.enTranslations}
+                showCantillations={this.state.showCantillations}
+                showNiqqud={this.state.showNiqqud}
+                showTranslit={this.state.showTranslit}
+              />
+            } />
             <Route path="/books/:code/:chapter" children={
-              <Chapter
+              <Passage
                 enTranslations={this.state.enTranslations}
                 showCantillations={this.state.showCantillations}
                 showNiqqud={this.state.showNiqqud}
@@ -96,7 +118,11 @@ class App extends React.Component {
               />
             } />
             <Route path="/books/:code" children={<Book />} />
-            <Route path="/search" children={<Search />} />
+            <Route path="/search" children={
+              <Search
+                bookAliases={this.state.bookAliases}
+              />
+            } />
             <Route path="/home" children={<Home />} />
             <Route path="/" children={<Home />} />
           </Switch>

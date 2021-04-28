@@ -8,38 +8,10 @@ import React from 'react';
 
 
 class NavBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      error: null,
-      collections: [],
-    };
-  }
-
-  componentDidMount() {
-    /* Load dropdown menu from the api */
-    fetch("https://api.barebonesbible.com/books")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            collections: result
-          });
-        },
-        (error) => {
-          this.setState({
-            error
-          });
-        }
-      )
-  }
-
   render() {
-    const { error, collections } = this.state;
+    const collections = this.props.collections;
     var dropdown;
-    if (error) {
-      dropdown = <NavDropdown.Header>Failed to load!</NavDropdown.Header>
-    } else if (collections.length === 0) {
+    if (collections === null) {
       dropdown = <NavDropdown.Header>Loading...</NavDropdown.Header>
     } else {
       dropdown = this._renderDropdown(collections)
@@ -52,6 +24,7 @@ class NavBar extends React.Component {
     ];
     const translationOptions = enTranslations.map(t => (
       <Form.Check
+        key={t.id}
         type="checkbox"
         label={t.name}
         id={t.id}
@@ -114,11 +87,11 @@ class NavBar extends React.Component {
   _renderDropdown(collections) {
     var dropdown = [];
     for (const item of collections) {
-      dropdown.push(<NavDropdown.Header>{item.collection}</NavDropdown.Header>);
+      dropdown.push(<NavDropdown.Header key={item.collection}>{item.collection}</NavDropdown.Header>);
       for (const book of item.books) {
-        dropdown.push(<NavDropdown.Item href={"/books/" + book.code}>{book.name}</NavDropdown.Item>);
+        dropdown.push(<NavDropdown.Item key={book.code} href={"/books/" + book.code}>{book.name}</NavDropdown.Item>);
       }
-      dropdown.push(<NavDropdown.Divider />);
+      dropdown.push(<NavDropdown.Divider key={item.collection + "/div"} />);
     }
     dropdown.pop();  /* drop last divider */
     return dropdown;

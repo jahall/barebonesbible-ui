@@ -23,6 +23,10 @@ body {
   max-height: 500px;
   overflow-y: auto;  /* or scroll */
 }
+.ref {
+  font-weight: bold;
+  font-size: small;
+}
 .en-version {
   font-size: x-small;
   color: #277da1;

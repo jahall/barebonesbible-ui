@@ -37,7 +37,8 @@ function Home() {
             <h2 className="mt-1">How?</h2>
             <p>
               <strong>How do I use it?</strong> You can use the Books dropdown to go to a specific chapter or use
-              the search bar to look up a specific passage. <a href="search?query=Jer+31:31-34">Try now!</a>
+              the search bar to look up a specific passage. <a href="search?query=Jer+31:31-34">Try now!</a> Then you can view
+              various English translations and click on individual words to discover their roots in the text.
             </p>
           </Col>
           <Col>
