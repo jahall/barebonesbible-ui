@@ -44,14 +44,16 @@ class Verse extends React.Component {
             <>
               <span className="ref">{verse.chapterId.replace(".", " ")}:{verse.verseNum}</span>{showTr(tr.translation)}
               &nbsp;&nbsp;
-              <span className="english hover">
+              <span className="english no-link">
                 {tr.tokens.map((token, index) =>
                   <Token
                     key={index}
                     strongs={token.strongs}
                     text={token.text}
                     type={token.type}
+                    hoveredCodes={this.props.hoveredCodes}
                     clickedCodes={this.props.clickedCodes}
+                    handleHover={this.props.handleTokenHover}
                     handleClick={this.props.handleTokenClick}
                   />)}
               </span>
@@ -80,20 +82,22 @@ class Verse extends React.Component {
           .map(tr => (
             <>
               <bdo dir={bdo}>
-                <span className={lan + " hover"}>
+                <span className={lan + " no-link"}>
                   {tr.tokens.map((token, index) =>
                     <Token
                       key={index}
                       strongs={token.strongs}
                       text={this.fixForeign(token.text)}
                       type={token.type}
+                      hoveredCodes={this.props.hoveredCodes}
                       clickedCodes={this.props.clickedCodes}
+                      handleHover={this.props.handleTokenHover}
                       handleClick={this.props.handleTokenClick}
                     />)}
                 </span>
               </bdo>
               {(!this.props.showTranslit) ? null : (
-                <span className="translit">
+                <span className="translit no-link">
                   <br/>
                   {tr.tokens.map((token, index) =>
                   <Token
@@ -101,7 +105,9 @@ class Verse extends React.Component {
                     strongs={token.strongs}
                     text={token.tlit}
                     type={token.type}
+                    hoveredCodes={this.props.hoveredCodes}
                     clickedCodes={this.props.clickedCodes}
+                    handleHover={this.props.handleTokenHover}
                     handleClick={this.props.handleTokenClick}
                   />)}
                 </span>

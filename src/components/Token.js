@@ -18,13 +18,30 @@ class Token extends React.Component {
       clickable = false;
     }
     if (clickable) {
-      text = <span onClick={(e) => this.props.handleClick(e, strongs)}>{text}</span>;
-      if (strongs.some(code => this.props.clickedCodes.includes(code))) {
-        text = <span className="token-clicked">{text}</span>;
-      }
+      let className = this.getClass();
+      text = (
+        <span
+          className={className}
+          onClick={(e) => this.props.handleClick(e, strongs)}
+          onMouseEnter={() => this.props.handleHover(strongs)}
+          onMouseLeave={() => this.props.handleHover([])}
+        >{text}
+        </span>
+      );
       text = <a href="#">{text}</a>;
     }
     return <span className={"token-" + type}>{text}</span>;
+  }
+
+  getClass() {
+    let strongs = this.props.strongs;
+    if (strongs.some(code => this.props.clickedCodes.includes(code))) {
+      return "box token-clicked";
+    } else if (strongs.some(code => this.props.hoveredCodes.includes(code))) {
+      return "box token-hovered";
+    } else {
+      return "";
+    }
   }
 }
   

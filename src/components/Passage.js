@@ -17,8 +17,10 @@ class Passage extends React.Component {
       name: "",
       chapters: 0,
       verses: null,
+      hoveredCodes: [],
       clickedCodes: [],
     };
+    this.handleTokenHover = this.handleTokenHover.bind(this);
     this.handleTokenClick = this.handleTokenClick.bind(this);
 
     const chapter = this.props.match.params.chapter;
@@ -39,6 +41,10 @@ class Passage extends React.Component {
     fetch("https://api.barebonesbible.com/books/" + code + "/" + this.start + "/" + this.end)
       .then(res => res.json())
       .then(res => this.setState({verses: res.verses}))
+  }
+
+  handleTokenHover(codes) {
+    this.setState({hoveredCodes: codes});
   }
 
   handleTokenClick(event, codes) {
@@ -107,7 +113,9 @@ class Passage extends React.Component {
           code={code}
           verse={verse}
           enTranslations={this.props.enTranslations}
+          hoveredCodes={this.state.hoveredCodes}
           clickedCodes={this.state.clickedCodes}
+          handleTokenHover={this.handleTokenHover}
           handleTokenClick={this.handleTokenClick}
           showCantillations={this.props.showCantillations}
           showNiqqud={this.props.showNiqqud}
