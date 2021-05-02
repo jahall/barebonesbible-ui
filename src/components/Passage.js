@@ -7,6 +7,7 @@ import Spinner from 'react-bootstrap/Spinner';
 
 import { withRouter } from "react-router-dom";
 
+import TokenModal from './TokenModal';
 import Verse from './Verse';
 
 
@@ -19,9 +20,11 @@ class Passage extends React.Component {
       verses: null,
       hoveredCodes: [],
       clickedCodes: [],
+      showModal: false,
     };
     this.handleTokenHover = this.handleTokenHover.bind(this);
     this.handleTokenClick = this.handleTokenClick.bind(this);
+    this.handleModalClose = this.handleModalClose.bind(this);
 
     const chapter = this.props.match.params.chapter;
     if (chapter === undefined) {
@@ -50,8 +53,15 @@ class Passage extends React.Component {
   handleTokenClick(event, codes) {
     event.preventDefault();
     if (typeof codes !== 'undefined') {
-      this.setState({clickedCodes: codes});
+      this.setState({
+        clickedCodes: codes,
+        showModal: codes.length > 0,
+      });
     }
+  }
+
+  handleModalClose() {
+    this.setState({showModal: false})
   }
 
   render() {
@@ -83,6 +93,12 @@ class Passage extends React.Component {
           </Row>
           {this.makeVerses()}
         </Container>
+        <TokenModal
+          strongsLookup={this.props.strongsLookup}
+          clickedCodes={this.state.clickedCodes}
+          show={this.state.showModal}
+          handleClose={this.handleModalClose}
+        />
       </div>
     )
   }

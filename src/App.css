@@ -47,6 +47,7 @@ body {
 }
 .token-clicked {
   text-shadow: 0px 0px 10px #f94144;
+  font-weight: bold;
 }
 .token-pre {
   color: #277da1;
@@ -70,4 +71,17 @@ body {
 .chapter-button {
   width: 60px;
   border-color: #D3D3D3;
+}
+/* Token modal */
+.sid {
+  font-size: 85%;
+  color: gray;
+}
+.modal-key {
+  font-size: small;
+  font-weight: bold;
+  color: gray;
+}
+.modal-section {
+  margin-bottom: 3px;
 }

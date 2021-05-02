@@ -32,6 +32,7 @@ class App extends React.Component {
     this.state = {
       collections: null,
       bookAliases: null,
+      strongsLookup: null,
       enTranslations: load("enTranslations", ["web"]),
       showCantillations: load("showCantillations", false),  /* toggle for showing cantillations */
       showNiqqud: load("showNiqqud", true),  /* toggle for showing niqqud */
@@ -50,6 +51,11 @@ class App extends React.Component {
     this.setState({
       collections: collections,
       bookAliases: bookAliases,
+    })
+    /* Load strongs */
+    const strongsLookup = await fetch("https://api.barebonesbible.com/strongs").then(res => res.json());
+    this.setState({
+      strongsLookup: strongsLookup,
     })
   }
 
@@ -103,6 +109,7 @@ class App extends React.Component {
           <Switch>
             <Route path="/books/:code/:start/:end" children={
               <Passage
+                strongsLookup={this.state.strongsLookup}
                 enTranslations={this.state.enTranslations}
                 showCantillations={this.state.showCantillations}
                 showNiqqud={this.state.showNiqqud}
@@ -111,6 +118,7 @@ class App extends React.Component {
             } />
             <Route path="/books/:code/:chapter" children={
               <Passage
+                strongsLookup={this.state.strongsLookup}
                 enTranslations={this.state.enTranslations}
                 showCantillations={this.state.showCantillations}
                 showNiqqud={this.state.showNiqqud}
