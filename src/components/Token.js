@@ -28,7 +28,7 @@ class Token extends React.Component {
         >{text}
         </span>
       );
-      text = <a href="#">{text}</a>;
+      text = <button>{text}</button>;
     }
     return <span className={"token-" + type}>{text}</span>;
   }

@@ -38,9 +38,12 @@ body {
   font-family: 'David Libre', serif;
   font-size: 160%;
 }
-.no-link a {
+.no-link button {
   color: black;
-  text-decoration: none;  /* Avoid underline on hover */
+  padding: 0;
+  border: none;
+  outline: none;
+  background: none;
 }
 .token-hovered {
   text-shadow: 0px 0px 10px #577590;

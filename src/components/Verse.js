@@ -41,13 +41,13 @@ class Verse extends React.Component {
       <p>
         {translations
           .map(tr => (
-            <>
+            <span key={tr.translation}>
               <span className="ref">{verse.chapterId.replace(".", " ")}:{verse.verseNum}</span>{showTr(tr.translation)}
               &nbsp;&nbsp;
               <span className="english no-link">
                 {tr.tokens.map((token, index) =>
                   <Token
-                    key={index}
+                    key={"en" + tr.translation + index.toString()}
                     strongs={token.strongs}
                     text={token.text}
                     type={token.type}
@@ -57,9 +57,9 @@ class Verse extends React.Component {
                     handleClick={this.props.handleTokenClick}
                   />)}
               </span>
-            </>
+            </span>
         ))
-        .reduce((prev, curr) => [prev, <br/>, curr])}
+        .reduce((prev, curr, index) => [prev, <br key={index}/>, curr])}
       </p>
     );
   }
@@ -80,12 +80,12 @@ class Verse extends React.Component {
       <p className={"text-" + textDir}>
         {translations
           .map(tr => (
-            <>
+            <span key={tr.translation}>
               <bdo dir={bdo}>
                 <span className={lan + " no-link"}>
                   {tr.tokens.map((token, index) =>
                     <Token
-                      key={index}
+                      key={lan.substring(0, 2) + tr.translation + index.toString()}
                       strongs={token.strongs}
                       text={this.fixForeign(token.text)}
                       type={token.type}
@@ -101,7 +101,7 @@ class Verse extends React.Component {
                   <br/>
                   {tr.tokens.map((token, index) =>
                   <Token
-                    key={index}
+                    key={lan.substring(0, 2) + "x" + tr.translation + index}
                     strongs={token.strongs}
                     text={token.tlit}
                     type={token.type}
@@ -112,9 +112,9 @@ class Verse extends React.Component {
                   />)}
                 </span>
               )}
-            </>
+            </span>
         ))
-        .reduce((prev, curr) => [prev, <br/>, curr])}
+        .reduce((prev, curr, index) => [prev, <br key={index}/>, curr])}
       </p>
     );
   }

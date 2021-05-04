@@ -126,6 +126,7 @@ class Passage extends React.Component {
     } else {
       return this.state.verses.map(verse => (
         <Verse
+          key={verse.chapterId + "." + verse.verseNum}
           code={code}
           verse={verse}
           enTranslations={this.props.enTranslations}

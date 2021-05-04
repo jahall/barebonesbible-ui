@@ -107,7 +107,7 @@ class App extends React.Component {
             handleTranslitClick={this.handleTranslitClick}
           />
           <Switch>
-            <Route path="/books/:code/:start/:end" children={
+            <Route path="/books/:code/:start/:end">
               <Passage
                 strongsLookup={this.state.strongsLookup}
                 enTranslations={this.state.enTranslations}
@@ -115,8 +115,8 @@ class App extends React.Component {
                 showNiqqud={this.state.showNiqqud}
                 showTranslit={this.state.showTranslit}
               />
-            } />
-            <Route path="/books/:code/:chapter" children={
+            </Route>
+            <Route path="/books/:code/:chapter">
               <Passage
                 strongsLookup={this.state.strongsLookup}
                 enTranslations={this.state.enTranslations}
@@ -124,15 +124,19 @@ class App extends React.Component {
                 showNiqqud={this.state.showNiqqud}
                 showTranslit={this.state.showTranslit}
               />
-            } />
-            <Route path="/books/:code" children={<Book />} />
-            <Route path="/search" children={
-              <Search
-                bookAliases={this.state.bookAliases}
-              />
-            } />
-            <Route path="/home" children={<Home />} />
-            <Route path="/" children={<Home />} />
+            </Route>
+            <Route path="/books/:code">
+              <Book />
+            </Route>
+            <Route path="/search">
+              <Search bookAliases={this.state.bookAliases} />
+            </Route>
+            <Route path="/home">
+              <Home />
+            </Route>
+            <Route path="/" exact>
+              <Home />
+            </Route>
           </Switch>
         </Router>
       </div>

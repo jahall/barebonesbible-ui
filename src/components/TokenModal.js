@@ -1,5 +1,6 @@
 import Modal from 'react-bootstrap/Modal';
 import React from 'react';
+import { withRouter } from "react-router-dom";
 
 
 class TokenModal extends React.Component {
@@ -31,12 +32,12 @@ class TokenModal extends React.Component {
           );
         }
         let part = (
-          <>
+          <span key={code}>
             <Modal.Header closeButton={isFirst}>
               <Modal.Title>
                 <span className="sid">({code})</span>&nbsp;
                 <span className={lan}>{meta.lemma}</span> &ndash;&nbsp;
-                <span class="translit">{meta.tlit}</span>
+                <span className="translit">{meta.tlit}</span>
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -45,7 +46,7 @@ class TokenModal extends React.Component {
               <p className="modal-section"><span className="modal-key">Derivation:</span> {meta.deriv}</p>
               <p className="modal-section"><span className="modal-key">References:</span> {occurPhrase}</p>
             </Modal.Body>
-          </>
+          </span>
         );
         parts.push(part);
         isFirst = false;
@@ -62,6 +63,8 @@ class TokenModal extends React.Component {
     let [book, c, v] = ref.split(".");
     let cv = c + "." + v;
     let url = "/books/" + book + "/" + cv + "/" + cv
+    /* Below *SHOULD* be <Link key={ref} className="ref" to={url}>...</Link> but it doesn't work!!!
+      It changes the url but doesn't re-render. */
     return <a key={ref} className="ref" href={url}>{book} {c}:{v}</a>
   }
 
@@ -79,4 +82,4 @@ class TokenModal extends React.Component {
   }
 }
   
-export default TokenModal;
+export default withRouter(TokenModal);
