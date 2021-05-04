@@ -44,21 +44,28 @@ class Book extends React.Component {
         <hr />
         <Row>
           <Col>
-            {chapters.map((chapter) => this._toButton(chapter))}
+            {chapters.map((chapter) => this.toButton(chapter))}
           </Col>
         </Row>
       </Container>
     )
   }
 
-  _toButton(chapter) {
+  toButton(chapter) {
     let code = this.props.match.params.code;
     let key = code + "." + chapter;
-    let href = "/books/" + code + "/" + chapter;
+    let handler = () => this.handleClick(code, chapter);
     return (
-      <Button key={key} className="chapter-button" variant="outline-dark" size="lg" href={href}>{chapter}</Button>)
-
+      <Button key={key} className="chapter-button" variant="outline-dark" size="lg" onClick={handler}>{chapter}</Button>
+    )
   }
+
+  handleClick(code, chapter) {
+    /* Need to re-route with "history" rather than href or it results in a full state-reload! */
+    let path = "/books/" + code + "/" + chapter;
+    this.props.history.push(path);
+  }
+
 }
 
 /* withRouter allows you to access this.props.match.params from within the class! */

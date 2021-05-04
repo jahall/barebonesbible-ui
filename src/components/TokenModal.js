@@ -1,6 +1,5 @@
 import Modal from 'react-bootstrap/Modal';
 import React from 'react';
-import Spinner from 'react-bootstrap/Spinner';
 
 
 class TokenModal extends React.Component {
@@ -21,7 +20,7 @@ class TokenModal extends React.Component {
       let meta = strongsLookup[lan][code];
       if (meta !== undefined) {
         var occurPhrase;
-        if (meta.count == 1) {
+        if (meta.count === 1) {
           occurPhrase = <>Occurs only <strong>once</strong>; see {this.refToUrl(meta.refs[0])}</>;
         } else {
           occurPhrase = (
