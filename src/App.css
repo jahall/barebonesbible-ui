@@ -66,6 +66,9 @@ body {
   font-size: 85%;
   font-style: italic;
 }
+.translit button {
+  font-style: italic;
+}
 /* Search-result highlighting */
 .highlight {
   color: red;

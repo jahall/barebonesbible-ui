@@ -7,7 +7,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { Redirect, withRouter } from "react-router-dom";
 import qs from 'qs';
 
-import { normalize } from "./aliases";
+import { normalize } from "./helpers";
 
 
 class Search extends React.Component {

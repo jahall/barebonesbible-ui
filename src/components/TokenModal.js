@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal';
 import React from 'react';
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 
 class TokenModal extends React.Component {
@@ -63,9 +63,14 @@ class TokenModal extends React.Component {
     let [book, c, v] = ref.split(".");
     let cv = c + "." + v;
     let url = "/books/" + book + "/" + cv + "/" + cv
-    /* Below *SHOULD* be <Link key={ref} className="ref" to={url}>...</Link> but it doesn't work!!!
-      It changes the url but doesn't re-render. */
-    return <a key={ref} className="ref" href={url}>{book} {c}:{v}</a>
+    return (
+      <Link
+        key={ref}
+        className="ref"
+        to={url}
+        onClick={this.props.handleClose}
+      >{book} {c}:{v}</Link>
+    );
   }
 
   joinList(refs) {

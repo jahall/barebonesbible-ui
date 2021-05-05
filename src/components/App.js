@@ -5,7 +5,7 @@ import Home from './Home';
 import NavBar from './NavBar';
 import Passage from './Passage';
 import Search from './Search';
-import { createBookAliases } from './aliases';
+import { createBookAliases, createBookLookup } from './helpers';
 
 import ls from 'local-storage';
 import React from 'react';
@@ -31,6 +31,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       collections: null,
+      bookLookup: null,
       bookAliases: null,
       strongsLookup: null,
       enTranslations: load("enTranslations", ["web"]),
@@ -45,12 +46,14 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    /* Load dropdown menu from the api */
+    /* Load dropdown menu and other book metadata */
     const collections = await fetch("https://api.barebonesbible.com/books").then(res => res.json());
     const bookAliases = createBookAliases(collections);
+    const bookLookup = createBookLookup(collections);
     this.setState({
       collections: collections,
       bookAliases: bookAliases,
+      bookLookup: bookLookup,
     })
     /* Load strongs */
     const strongsLookup = await fetch("https://api.barebonesbible.com/strongs").then(res => res.json());
@@ -109,6 +112,7 @@ class App extends React.Component {
           <Switch>
             <Route path="/books/:code/:start/:end">
               <Passage
+                bookLookup={this.state.bookLookup}
                 strongsLookup={this.state.strongsLookup}
                 enTranslations={this.state.enTranslations}
                 showCantillations={this.state.showCantillations}
@@ -118,6 +122,7 @@ class App extends React.Component {
             </Route>
             <Route path="/books/:code/:chapter">
               <Passage
+                bookLookup={this.state.bookLookup}
                 strongsLookup={this.state.strongsLookup}
                 enTranslations={this.state.enTranslations}
                 showCantillations={this.state.showCantillations}
@@ -126,7 +131,9 @@ class App extends React.Component {
               />
             </Route>
             <Route path="/books/:code">
-              <Book />
+              <Book 
+                bookLookup={this.state.bookLookup}
+              />
             </Route>
             <Route path="/search">
               <Search bookAliases={this.state.bookAliases} />

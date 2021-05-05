@@ -16,6 +16,7 @@ class NavBar extends React.Component {
       showSettings: false,
     }
     this.handleSelect = this.handleSelect.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   render() {
@@ -30,7 +31,7 @@ class NavBar extends React.Component {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         {/* Collapsable bit */}
         <Navbar.Collapse>
-          <Nav className="mr-auto" >  {/* onSelect={(key) => this.handleSelect(key)} */}
+          <Nav className="mr-auto" onSelect={(key) => this.handleSelect(key)}>  {/*  */}
             {/* Home */}
             <Nav.Link as={Link} to="/home">Home</Nav.Link>
             {/* Books */}
@@ -39,7 +40,7 @@ class NavBar extends React.Component {
             {settings}
           </Nav>
           {/* Search */}
-          <Form inline action="/search">
+          <Form inline onSubmit={this.handleSearch}>
             <FormControl type="text" name="query" placeholder="Passage" className="mr-sm-2" />
             <Button type="submit" variant="primary">Search</Button>
           </Form>
@@ -49,9 +50,16 @@ class NavBar extends React.Component {
   }
 
   handleSelect(code) {
-    console.log(code)
-    this.props.history.push("/books/" + code);
     this.setState({showBooks: false});
+    this.props.history.push("/books/" + code);
+  }
+
+  handleSearch(event) {
+    event.preventDefault();
+    this.props.history.push({
+      pathname: "/search",
+      search: "?query=" + event.target.query.value,
+    });
   }
 
   renderDropdown(collections) {
@@ -62,9 +70,7 @@ class NavBar extends React.Component {
       for (const item of collections) {
         dropdown.push(<NavDropdown.Header key={item.collection}>{item.collection}</NavDropdown.Header>);
         for (const book of item.books) {
-          /* This SHOULD BE <NavDropdown.Item key={book.code} eventKey={book.code}> where eventKey is handled
-             by handleSelect func...but it doesnt f-in re-render!! */
-          dropdown.push(<NavDropdown.Item key={book.code} href={"/books/" + book.code}>{book.name}</NavDropdown.Item>);
+          dropdown.push(<NavDropdown.Item key={book.code} eventKey={book.code}>{book.name}</NavDropdown.Item>);
         }
         dropdown.push(<NavDropdown.Divider key={item.collection + "/div"} />);
       }

@@ -14,6 +14,17 @@ export function createBookAliases(collections) {
     return bookAliases;
   }
 
+export function createBookLookup(collections) {
+  /* Create lookup of book to metadata */
+  var bookLookup = {};
+  for (const item of collections) {
+    for (const book of item.books) {
+      bookLookup[book.code] = book;
+    }
+  }
+  return bookLookup;
+}
+
 export function normalize(alias) {
     /* Normalize aliases to lower case with no spaces */
     return alias.toLowerCase().replace(/\s/g, "");

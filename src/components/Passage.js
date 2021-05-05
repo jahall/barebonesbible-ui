@@ -15,8 +15,6 @@ class Passage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      chapters: 0,
       verses: null,
       hoveredCodes: [],
       clickedCodes: [],
@@ -25,25 +23,38 @@ class Passage extends React.Component {
     this.handleTokenHover = this.handleTokenHover.bind(this);
     this.handleTokenClick = this.handleTokenClick.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
-
-    const chapter = this.props.match.params.chapter;
-    if (chapter === undefined) {
-      this.start = this.props.match.params.start;
-      this.end = this.props.match.params.end;
-    } else {
-      this.start = chapter + ".1";
-      this.end = chapter + ".x";
-    }
   }
 
   componentDidMount() {
+    /* Load initial passage */
     let code = this.props.match.params.code;
-    fetch("https://api.barebonesbible.com/books/" + code)
-      .then(res => res.json())
-      .then(res => this.setState({name: res.name, chapters: res.chapters}))
-    fetch("https://api.barebonesbible.com/books/" + code + "/" + this.start + "/" + this.end)
+    let [start, end] = this.getRange(this.props);
+    fetch("https://api.barebonesbible.com/books/" + code + "/" + start + "/" + end)
       .then(res => res.json())
       .then(res => this.setState({verses: res.verses}))
+  }
+
+  componentDidUpdate(prevProps) {
+    /* Check if a new passage has been requested */
+    let prevCode = prevProps.match.params.code;
+    let [prevStart, prevEnd] = this.getRange(prevProps);
+    let code = this.props.match.params.code;
+    let [start, end] = this.getRange(this.props);
+    if (prevCode !== code || prevStart !== start || prevEnd !== end) {
+      this.setState({verses: null})
+      fetch("https://api.barebonesbible.com/books/" + code + "/" + start + "/" + end)
+        .then(res => res.json())
+        .then(res => this.setState({verses: res.verses}))
+    }
+  }
+
+  getRange(props) {
+    const chapter = props.match.params.chapter;
+    if (chapter === undefined) {
+      return [props.match.params.start, props.match.params.end];
+    } else {
+      return [chapter + ".1", chapter + ".x"];
+    }
   }
 
   handleTokenHover(codes) {
@@ -65,17 +76,37 @@ class Passage extends React.Component {
   }
 
   render() {
+    if (this.props.bookLookup === null) {
+      return <Container><br/><br/><br/><br/>{this.makeSpinner()}</Container>
+    }
     let code = this.props.match.params.code;
+    let book = this.props.bookLookup[code];
     let chapter = this.props.match.params.chapter;
     var prevButton;
     var nextButton;
     if (chapter !== undefined) {
       chapter = parseInt(chapter);
-      let lastChapter = this.state.chapters;
+      let lastChapter = book.chapters;
       let prevChapterLink = "/books/" + code + "/" + (chapter - 1).toString();
       let nextChapterLink = "/books/" + code + "/" + (chapter + 1).toString();
-      prevButton = <Button className="float-left" variant="outline-dark" href={prevChapterLink} disabled={chapter === 1}>&laquo;</Button>;
-      nextButton = <Button className="float-right" variant="outline-dark" href={nextChapterLink} disabled={chapter === lastChapter}>&raquo;</Button>
+      prevButton = (
+        <Button
+          className="float-left"
+          variant="outline-dark"
+          onClick={() => this.props.history.push(prevChapterLink)}
+          disabled={chapter === 1}
+        >&laquo;
+        </Button>
+      );
+      nextButton = (
+        <Button
+          className="float-right"
+          variant="outline-dark"
+          onClick={() => this.props.history.push(nextChapterLink)}
+          disabled={chapter === lastChapter}
+        >&raquo;
+        </Button>
+      );
     } else {
       prevButton = <></>;
       nextButton = <></>;
@@ -86,7 +117,7 @@ class Passage extends React.Component {
           <Row lg={1}>
             <Col>
               <h1 className="mt-5" align="center">
-                {prevButton} {this.state.name} {this.makeRef()} {nextButton}
+                {prevButton} {book.name} {this.makeRef()} {nextButton}
               </h1>
               <br/>
             </Col>
@@ -108,9 +139,10 @@ class Passage extends React.Component {
     if (chapter !== undefined) {
       return chapter
     }
-    let cv1 = this.start.split(".");
-    let cv2 = this.end.split(".");
-    if (this.start === this.end) {
+    let [start, end] = this.getRange(this.props);
+    let cv1 = start.split(".");
+    let cv2 = end.split(".");
+    if (start === end) {
       return <>{cv1[0]}<span style={{fontSize: "large"}}>:{cv1[1]}</span></>
     } else if (cv1[0] === cv2[0]) {
       return <>{cv1[0]}<span style={{fontSize: "large"}}>:{cv1[1]}-{cv2[1]}</span></>
