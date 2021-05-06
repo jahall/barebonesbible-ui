@@ -1,3 +1,14 @@
+import ls from 'local-storage';
+
+
+export function localLoad(field, def) {
+  /* Load value from local storage...or return default */
+  var value = ls.get(field);
+  if (value === undefined || value === null) {
+    value = def;
+  }
+  return value;
+}
 
 export function createBookAliases(collections) {
     /* Create mapping from alias to book code */

@@ -5,9 +5,13 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Row from 'react-bootstrap/Row';
+import { Link } from "react-router-dom";
+
+import { localLoad } from './helpers';
 
 
 function Home() {
+  let lastVisited = localLoad("lastVisited", "/books/Gen/1");
   return (
     <div className="home">
       <Jumbotron style={{ backgroundImage: `linear-gradient(rgba(255,255,255,0.4), rgba(0,0,0,0.4)), url(${scrolls})` }}>
@@ -18,7 +22,7 @@ function Home() {
             Enjoy browsing by book or looking up a passage.
           </p>
           <p>
-            <Button variant="primary" href="/books/Gen/1">Dive In!</Button>
+            <Button variant="primary" as={Link} to={lastVisited}>Dive In!</Button>
           </p>
         </Container>
       </Jumbotron>
@@ -37,7 +41,7 @@ function Home() {
             <h2 className="mt-1">How?</h2>
             <p>
               <strong>How do I use it?</strong> You can use the Books dropdown to go to a specific chapter or use
-              the search bar to look up a specific passage. <a href="search?query=Jer+31:31-34">Try now!</a> Then you can view
+              the search bar to look up a specific passage. <Link to="search?query=Jer+31:31-34">Try now!</Link> Then you can view
               various English translations and click on individual words to discover their roots in the text.
             </p>
           </Col>
@@ -57,10 +61,7 @@ function Home() {
               <strong>My name is Joe.</strong> I like maths, being outside, programming and Jesus. I decided to
               build B<sup>3</sup> as a gift for my primary user and great encourager: my dad! However, once I finished
               I thought <em>"this is actually quite a neat tool, maybe I should share it more broadly."</em> So here
-              you go, world &ndash; enjoy!
-            </p>
-            <p>
-              I would love to hear feedback on your experience of using this site, what you like or what could be
+              you go, world &ndash; enjoy! I would love to hear feedback on your experience of using this site, what you like or what could be
               improved. Just drop me an email at <a href="mailto:joe@barebonesbible.com?Subject=B3%20Feedback" target="_top">joe@barebonesbible.com</a>.
             </p>
           </Col>

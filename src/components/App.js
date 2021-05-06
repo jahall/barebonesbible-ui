@@ -2,10 +2,10 @@ import '../App.css';
 
 import Book from './Book';
 import Home from './Home';
-import NavBar from './NavBar';
+import Navigation from './Navigation';
 import Passage from './Passage';
 import Search from './Search';
-import { createBookAliases, createBookLookup } from './helpers';
+import { createBookAliases, createBookLookup, localLoad } from './helpers';
 
 import ls from 'local-storage';
 import React from 'react';
@@ -16,15 +16,6 @@ import {
 } from "react-router-dom";
 
 
-function load(field, def) {
-  /* Load value from local storage...or return default */
-  var value = ls.get(field);
-  if (value === undefined || value === null) {
-    value = def;
-  }
-  return value;
-}
-
 
 class App extends React.Component {
   constructor(props) {
@@ -34,15 +25,14 @@ class App extends React.Component {
       bookLookup: null,
       bookAliases: null,
       strongsLookup: null,
-      enTranslations: load("enTranslations", ["web"]),
-      showCantillations: load("showCantillations", false),  /* toggle for showing cantillations */
-      showNiqqud: load("showNiqqud", true),  /* toggle for showing niqqud */
-      showTranslit: load("showTranslit", true),  /* toggle for showing transliteration */
+      enTranslations: localLoad("enTranslations", ["web"]),
+      showPopups: localLoad("showPopups", true),  /* toggle for strongs popups */
+      showTranslit: localLoad("showTranslit", true),  /* toggle for showing transliteration */
+      showCantillations: localLoad("showCantillations", false),  /* toggle for showing cantillations */
+      showNiqqud: localLoad("showNiqqud", true),  /* toggle for showing niqqud */
     };
     this.handleTranslationClick = this.handleTranslationClick.bind(this);
-    this.handleCantillationsClick = this.handleCantillationsClick.bind(this);
-    this.handleNiqqudClick = this.handleNiqqudClick.bind(this);
-    this.handleTranslitClick = this.handleTranslitClick.bind(this);
+    this.handleSettingsClick = this.handleSettingsClick.bind(this);
   }
 
   async componentDidMount() {
@@ -76,45 +66,39 @@ class App extends React.Component {
     ls.set("enTranslations", newEnTranslations);
   }
 
-  handleCantillationsClick() {
-    const newShow = !this.state.showCantillations;
-    this.setState({showCantillations: newShow});
-    ls.set("showCantillations", newShow);
-  }
-
-  handleNiqqudClick() {
-    const newShow = !this.state.showNiqqud;
-    this.setState({showNiqqud: newShow});
-    ls.set("showNiqqud", newShow);
-  }
-
-  handleTranslitClick() {
-    const newShow = !this.state.showTranslit;
-    this.setState({showTranslit: newShow});
-    ls.set("showTranslit", newShow);
+  handleSettingsClick(field) {
+    const toggled = !this.state[field];
+    this.setState({[field]: toggled});
+    ls.set(field, toggled);
   }
 
   render() {
     return (
       <div className="App">
         <Router>
-          <NavBar
+          <Navigation
             collections={this.state.collections}
             enTranslations={this.state.enTranslations}
+            showPopups={this.state.showPopups}
+            showTranslit={this.state.showTranslit}
             showCantillations={this.state.showCantillations}
             showNiqqud={this.state.showNiqqud}
-            showTranslit={this.state.showTranslit}
             handleTranslationClick={this.handleTranslationClick}
-            handleCantillationsClick={this.handleCantillationsClick}
-            handleNiqqudClick={this.handleNiqqudClick}
-            handleTranslitClick={this.handleTranslitClick}
+            handleSettingsClick={this.handleSettingsClick}
           />
           <Switch>
+            <Route path="/" exact>
+              <Home />
+            </Route>
+            <Route path="/home" exact>
+              <Home />
+            </Route>
             <Route path="/books/:code/:start/:end">
               <Passage
                 bookLookup={this.state.bookLookup}
                 strongsLookup={this.state.strongsLookup}
                 enTranslations={this.state.enTranslations}
+                showPopups={this.state.showPopups}
                 showCantillations={this.state.showCantillations}
                 showNiqqud={this.state.showNiqqud}
                 showTranslit={this.state.showTranslit}
@@ -125,6 +109,7 @@ class App extends React.Component {
                 bookLookup={this.state.bookLookup}
                 strongsLookup={this.state.strongsLookup}
                 enTranslations={this.state.enTranslations}
+                showPopups={this.state.showPopups}
                 showCantillations={this.state.showCantillations}
                 showNiqqud={this.state.showNiqqud}
                 showTranslit={this.state.showTranslit}
@@ -137,12 +122,6 @@ class App extends React.Component {
             </Route>
             <Route path="/search">
               <Search bookAliases={this.state.bookAliases} />
-            </Route>
-            <Route path="/home">
-              <Home />
-            </Route>
-            <Route path="/" exact>
-              <Home />
             </Route>
           </Switch>
         </Router>

@@ -8,7 +8,7 @@ import React from 'react';
 import { Link, withRouter } from "react-router-dom";
 
 
-class NavBar extends React.Component {
+class Navigation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -126,21 +126,27 @@ class NavBar extends React.Component {
           <Form>
             <Form.Check
               type="checkbox"
-              label="Cantillations"
-              defaultChecked={this.props.showCantillations}
-              onChange={this.props.handleCantillationsClick}
-            />
-            <Form.Check
-              type="checkbox"
-              label="Niqqud"
-              defaultChecked={this.props.showNiqqud}
-              onChange={this.props.handleNiqqudClick}
+              label="Word Popups"
+              defaultChecked={this.props.showPopups}
+              onChange={() => this.props.handleSettingsClick("showPopups")}
             />
             <Form.Check
               type="checkbox"
               label="Transliteration"
               defaultChecked={this.props.showTranslit}
-              onChange={this.props.handleTranslitClick}
+              onChange={() => this.props.handleSettingsClick("showTranslit")}
+            />
+            <Form.Check
+              type="checkbox"
+              label="Niqqud"
+              defaultChecked={this.props.showNiqqud}
+              onChange={() => this.props.handleSettingsClick("showNiqqud")}
+            />
+            <Form.Check
+              type="checkbox"
+              label="Cantillations"
+              defaultChecked={this.props.showCantillations}
+              onChange={() => this.props.handleSettingsClick("showCantillations")}
             />
           </Form>
         </div>
@@ -151,4 +157,4 @@ class NavBar extends React.Component {
 };
 
 
-export default withRouter(NavBar);
+export default withRouter(Navigation);
