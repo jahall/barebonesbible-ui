@@ -5,6 +5,7 @@ import Home from './Home';
 import Navigation from './Navigation';
 import Passage from './Passage';
 import Search from './Search';
+import SearchTerm from "./SearchTerm";
 import { createBookAliases, createBookLookup, localLoad } from './helpers';
 
 import ls from 'local-storage';
@@ -118,6 +119,16 @@ class App extends React.Component {
             <Route path="/books/:code">
               <Book 
                 bookLookup={this.state.bookLookup}
+              />
+            </Route>
+            <Route path="/search/:term">
+              <SearchTerm
+                strongsLookup={this.state.strongsLookup}
+                enTranslations={this.state.enTranslations}
+                showPopups={this.state.showPopups}
+                showCantillations={this.state.showCantillations}
+                showNiqqud={this.state.showNiqqud}
+                showTranslit={this.state.showTranslit}
               />
             </Route>
             <Route path="/search">

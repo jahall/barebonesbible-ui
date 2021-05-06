@@ -37,6 +37,18 @@ class Search extends React.Component {
     if (book !== undefined) {
       return <Redirect to={"/books/" + book} />;
     }
+    /* 2. Did they search for a strongs reference (optionally filtered for a book) */
+    match = query.match(/^([hg]\d+)\s*(?:book:)?\s*([\w\s]+)?\s*$/i);  // note: (?:...) is "non-capturing"
+    if (match !== null) {
+      book = (match[2] === undefined) ? null : bookAliases[normalize(match[2])];
+      if (book !== undefined) {
+        let url = "/search/" + match[1].toUpperCase();
+        if (book !== null) {
+          url = url + "?book=" + book;
+        }
+        return <Redirect to={url} />
+      }
+    }
     /* 2. Did they search for a specific chapter */
     match = query.match(/^([\w\s]+[a-z])\s*(\d+)$/i);
     if (match !== null) {
