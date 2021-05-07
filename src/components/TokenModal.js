@@ -22,11 +22,11 @@ class TokenModal extends React.Component {
       if (meta !== undefined) {
         var occurPhrase;
         if (meta.count === 1) {
-          occurPhrase = <>Occurs only <strong>once</strong>; see {this.refToUrl(meta.refs[0])}</>;
+          occurPhrase = <>Occurs <strong><Link to={"/strongs/" + code}>only once</Link></strong>; see {this.refToUrl(meta.refs[0])}</>;
         } else {
           occurPhrase = (
             <>
-              Occurs <strong>{meta.count}</strong> times; first occurrences can be found
+              Occurs <strong><Link to={"/strongs/" + code}>{meta.count} times</Link></strong>; first occurrences can be found
               in {this.joinList(meta.refs.map(this.refToUrl))}
             </>
           );
@@ -41,9 +41,7 @@ class TokenModal extends React.Component {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <p className="modal-section"><span className="modal-key">Strongs:</span> {meta.def}</p>
-              <p className="modal-section"><span className="modal-key">KJV:</span> {meta.kjv}</p>
-              <p className="modal-section"><span className="modal-key">Derivation:</span> {meta.deriv}</p>
+              <p className="modal-section"><span className="modal-key">Strongs:</span> {meta.def} &mdash; {meta.kjv} &mdash; {meta.deriv}</p>
               <p className="modal-section"><span className="modal-key">References:</span> {occurPhrase}</p>
             </Modal.Body>
           </span>

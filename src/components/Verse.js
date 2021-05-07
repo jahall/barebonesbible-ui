@@ -17,8 +17,9 @@ class Verse extends React.Component {
     let english = this.constructEnglish(code, verse);
     let hebrew = this.constructForeign(code, verse, "hebrew");
     let greek = this.constructForeign(code, verse, "greek");
+    let cls = (this.props.index % 2 === 0) ? "even-verse" : "odd-verse";
     return (
-      <Row key={key} lg={1}>
+      <Row key={key} lg={1} className={cls}>
         <Col>
           {english}
           {hebrew}

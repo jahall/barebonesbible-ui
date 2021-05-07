@@ -86,8 +86,18 @@ body {
 .modal-key {
   font-size: small;
   font-weight: bold;
-  color: gray;
+  color: #585858;
 }
 .modal-section {
   margin-bottom: 3px;
+}
+/* Verses */
+.even-verse {
+  background: WhiteSmoke;
+  border-radius: 10px;
+  padding: 10px 0px 0px 0px;
+}
+/* Odd verses */
+.odd-verse {
+  padding: 10px 0px 0px 0px;
 }

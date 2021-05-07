@@ -11,11 +11,7 @@ import TokenModal from './TokenModal';
 import Verse from './Verse';
 
 
-/* TODO:
-1. Make pretty title
-2. Make pagination
-3. Add link in modal
-*/
+/* TODO: Make pagination */
 
 
 class SearchTerm extends React.Component {
@@ -34,6 +30,17 @@ class SearchTerm extends React.Component {
   }
 
   componentDidMount() {
+    this.fetchVerses();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.location !== this.props.location) {
+      this.setState({verses: null})
+      this.fetchVerses();
+    }
+  }
+
+  fetchVerses() {
     /* Load initial page */
     let term = this.props.match.params.term;
     let book = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).book;
@@ -49,12 +56,6 @@ class SearchTerm extends React.Component {
     this.setState({clickedCodes: [term]});
   }
 
-  componentDidUpdate(prevProps) {
-    /* Check if a new passage has been requested */
-    if (prevProps.location !== this.props.location) {
-      let egg = 1;
-    }
-  }
 
   handleTokenHover(codes) {
     this.setState({hoveredCodes: codes});
@@ -78,14 +79,18 @@ class SearchTerm extends React.Component {
     if (this.props.strongsLookup === null) {
       return <Container><br/><br/><br/><br/>{this.makeSpinner()}</Container>
     }
-    let term = this.props.match.params.term;
+    let code = this.props.match.params.term;
+    let lan = (code[0].toUpperCase() === "H") ? "hebrew" : "greek";
+    let meta = this.props.strongsLookup[lan][code];
     return (
       <div className="search-term">
         <Container>
           <Row lg={1}>
             <Col>
               <h1 className="mt-5" align="center">
-                {term}
+                <span className="sid">({code})</span>&nbsp;
+                <span className={lan}>{meta.lemma}</span> &ndash;&nbsp;
+                <span className="translit">{meta.tlit}</span>
               </h1>
               <br/>
             </Col>
@@ -106,11 +111,12 @@ class SearchTerm extends React.Component {
     if (this.state.verses === null) {
       return this.makeSpinner();
     } else {
-      return this.state.verses.map(verse => (
+      return this.state.verses.map((verse, index) => (
         <Verse
           key={verse.chapterId + "." + verse.verseNum}
           code={verse.chapterId.split(".")[0]}
           verse={verse}
+          index={index}
           enTranslations={this.props.enTranslations}
           hoveredCodes={this.state.hoveredCodes}
           clickedCodes={this.state.clickedCodes}

@@ -42,14 +42,14 @@ class Search extends React.Component {
     if (match !== null) {
       book = (match[2] === undefined) ? null : bookAliases[normalize(match[2])];
       if (book !== undefined) {
-        let url = "/search/" + match[1].toUpperCase();
+        let url = "/strongs/" + match[1].toUpperCase();
         if (book !== null) {
           url = url + "?book=" + book;
         }
         return <Redirect to={url} />
       }
     }
-    /* 2. Did they search for a specific chapter */
+    /* 3. Did they search for a specific chapter */
     match = query.match(/^([\w\s]+[a-z])\s*(\d+)$/i);
     if (match !== null) {
       book = bookAliases[normalize(match[1])];
@@ -59,21 +59,21 @@ class Search extends React.Component {
     }
     var cv1;
     var cv2;
-    /* 3. Did they search for a specific verse */
+    /* 4. Did they search for a specific verse */
     match = query.match(/^([\w\s]+[a-z])\s*(\d+)\s*:(\d+)$/i);
     if (match !== null) {
       book = bookAliases[normalize(match[1])];
       cv1 = match[2] + "." + match[3];
       cv2 = cv1;
     }
-    /* 4. Did they search for a range of verses (within a chapter) */
+    /* 5. Did they search for a range of verses (within a chapter) */
     match = query.match(/^([\w\s]+[a-z])\s*(\d+)\s*:\s*(\d+)\s*-\s*(\d+)$/i);
     if (match !== null) {
       book = bookAliases[normalize(match[1])];
       cv1 = match[2] + "." + match[3];
       cv2 = match[2] + "." + match[4];
     }
-    /* 5. Did they search for a range of verses (across chapters) */
+    /* 6. Did they search for a range of verses (across chapters) */
     match = query.match(/^([\w\s]+[a-z])\s*(\d+)\s*:\s*(\d+)\s*-\s*(\d+)\s*:\s*(\d+)$/i);
     if (match !== null) {
       book = bookAliases[normalize(match[1])];

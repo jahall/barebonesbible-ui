@@ -5,16 +5,28 @@ import Home from './Home';
 import Navigation from './Navigation';
 import Passage from './Passage';
 import Search from './Search';
-import SearchTerm from "./SearchTerm";
+import SearchStrongs from "./SearchStrongs";
 import { createBookAliases, createBookLookup, localLoad } from './helpers';
 
 import ls from 'local-storage';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
+  useLocation,
 } from "react-router-dom";
+
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 
 
@@ -77,6 +89,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Router>
+          <ScrollToTop/>
           <Navigation
             collections={this.state.collections}
             enTranslations={this.state.enTranslations}
@@ -121,8 +134,8 @@ class App extends React.Component {
                 bookLookup={this.state.bookLookup}
               />
             </Route>
-            <Route path="/search/:term">
-              <SearchTerm
+            <Route path="/strongs/:term">
+              <SearchStrongs
                 strongsLookup={this.state.strongsLookup}
                 enTranslations={this.state.enTranslations}
                 showPopups={this.state.showPopups}

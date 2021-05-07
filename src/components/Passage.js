@@ -156,11 +156,12 @@ class Passage extends React.Component {
     if (this.state.verses === null) {
       return this.makeSpinner();
     } else {
-      return this.state.verses.map(verse => (
+      return this.state.verses.map((verse, index) => (
         <Verse
           key={verse.chapterId + "." + verse.verseNum}
           code={code}
           verse={verse}
+          index={index}
           enTranslations={this.props.enTranslations}
           hoveredCodes={this.state.hoveredCodes}
           clickedCodes={this.state.clickedCodes}
