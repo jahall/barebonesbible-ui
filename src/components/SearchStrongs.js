@@ -117,10 +117,10 @@ class SearchTerm extends React.Component {
     }
     let pageList = [page - 1, page, page + 1];
     pageList = pageList.filter(p => p >= 1 && p <= pages);
-    if (pageList[0] == 3) {pageList.unshift(2)};
-    if (pageList[0] == 2) {pageList.unshift(1)};
-    if (pageList[pageList.length - 1] == pages - 2) {pageList.push(pages - 1)};
-    if (pageList[pageList.length - 1] == pages - 1) {pageList.push(pages)};
+    if (pageList[0] === 3) {pageList.unshift(2)};
+    if (pageList[0] === 2) {pageList.unshift(1)};
+    if (pageList[pageList.length - 1] === pages - 2) {pageList.push(pages - 1)};
+    if (pageList[pageList.length - 1] === pages - 1) {pageList.push(pages)};
     var left = null;
     var right = null;
     if (pageList[0] !== 1) {
