@@ -115,25 +115,34 @@ class SearchTerm extends React.Component {
     if (pages === null || pages === undefined || this.state.verses === null) {
       return null;
     }
-    let pageList = [page - 3, page - 2, page - 1, page, page + 1, page + 2, page + 3];
+    let pageList = [page - 1, page, page + 1];
     pageList = pageList.filter(p => p >= 1 && p <= pages);
+    if (pageList[0] == 3) {pageList.unshift(2)};
+    if (pageList[0] == 2) {pageList.unshift(1)};
+    if (pageList[pageList.length - 1] == pages - 2) {pageList.push(pages - 1)};
+    if (pageList[pageList.length - 1] == pages - 1) {pageList.push(pages)};
     var left = null;
     var right = null;
-    if (pageList[0] >= 2) {
-      left = <Pagination.Item onClick={() => this.pageClick(1)}>1</Pagination.Item>;
-      if (pageList[0] >= 3) {
-        left = <>{left}<Pagination.Ellipsis disabled={true} /></>;
-      }
+    if (pageList[0] !== 1) {
+      left = (
+        <>
+          <Pagination.Item onClick={() => this.pageClick(1)}>1</Pagination.Item>
+          <Pagination.Ellipsis disabled={true} />
+        </>
+      );
     }
-    if (pageList[pageList.length - 1] <= pages - 1) {
-      right = <Pagination.Item onClick={() => this.pageClick(pages)}>{pages}</Pagination.Item>;
-      if (pageList[pageList.length - 1] <= pages - 1) {
-        right = <><Pagination.Ellipsis disabled={true} />{right}</>;
-      }
+    if (pageList[pageList.length - 1] !== pages) {
+      right = (
+        <>
+          <Pagination.Ellipsis disabled={true} />
+          <Pagination.Item onClick={() => this.pageClick(pages)}>{pages}</Pagination.Item>
+        </>
+      );
     }
     return (
       <Row lg={1}>
         <Col>
+          <br/>
           <Pagination className="justify-content-center">
             <Pagination.Prev disabled={page === 1} onClick={() => this.pageClick(page - 1)}/>
             {left}
