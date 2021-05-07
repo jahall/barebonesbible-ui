@@ -31,7 +31,7 @@ class TokenModal extends React.Component {
             </>
           );
         }
-        let def = (meta.def.length <= 15) ? <strong>{meta.def}</strong> : meta.def;
+        let def = this.makeCleverDef(meta)
         let part = (
           <span key={code}>
             <Modal.Header closeButton={isFirst}>
@@ -42,7 +42,7 @@ class TokenModal extends React.Component {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <p className="modal-section"><span className="modal-key">Definition:</span> {def} &mdash; {meta.kjv} &mdash; {meta.deriv}</p>
+              <p className="modal-section"><span className="modal-key">Definition:</span> {def}</p>
               <p className="modal-section"><span className="modal-key">References:</span> {occurPhrase}</p>
             </Modal.Body>
           </span>
@@ -56,6 +56,26 @@ class TokenModal extends React.Component {
         {parts}
       </Modal>
     );
+  }
+
+  makeCleverDef(meta) {
+    let def1 = meta.def.replace(/[.;]\s*$/, "");
+    let def2 = meta.kjv.replace(/[.;]\s*$/, "");
+    let deriv = meta.deriv.replace(/[.;]\s*$/, "");
+    let sep = <>&mdash;</>;
+    let badDef1 = def1.startsWith("[") || def1.startsWith("(")|| def1.startsWith("properly");
+    let badDef2 = def2.startsWith("[") || def2.startsWith("(")|| def2.startsWith("properly");
+    if ((badDef1 || def2.length < def1.length) && !badDef2) {
+      /* Hack from https://stackoverflow.com/questions/16201656/how-to-swap-two-variables-in-javascript */
+      def2 = [def1, def1 = def2][0];
+    }
+    let firstBit = def1.split(/[,(;]/, 1)[0];
+    let secondBit = def1.substring(firstBit.length);
+    if (firstBit.length < 30 && !firstBit.includes("[")) {
+      return <><strong>{firstBit}</strong>{secondBit} {sep} {def2} {sep} {deriv}</>;
+    } else {
+      return <>{def1} {sep} {def2} {sep} {deriv}</>;
+    }
   }
 
   refToUrl(ref) {

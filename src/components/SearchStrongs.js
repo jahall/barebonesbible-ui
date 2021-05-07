@@ -5,13 +5,11 @@ import Row from 'react-bootstrap/Row';
 import React from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import qs from 'qs';
+import ls from 'local-storage';
 import { withRouter } from "react-router-dom";
 
 import TokenModal from './TokenModal';
 import Verse from './Verse';
-
-
-/* TODO: Make pagination */
 
 
 class SearchTerm extends React.Component {
@@ -32,11 +30,13 @@ class SearchTerm extends React.Component {
 
   componentDidMount() {
     this.fetchVerses();
+    ls.set("lastVisited", this.props.location);
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.location !== this.props.location) {
       this.setState({verses: null, page: 1}, () => this.fetchVerses());
+      ls.set("lastVisited", this.props.location);
     } else if (prevState.page !== this.state.page) {
       this.setState({verses: null}, () => this.fetchVerses());
     }
@@ -112,7 +112,7 @@ class SearchTerm extends React.Component {
   makePagination() {
     let page = this.state.page;
     let pages = this.state.pages;
-    if (pages === null || pages === undefined || this.state.verses === null) {
+    if (pages === null || pages === undefined || pages === 1 || this.state.verses === null) {
       return null;
     }
     let pageList = [page - 1, page, page + 1];
