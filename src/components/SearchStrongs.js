@@ -1,6 +1,6 @@
-import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import Pagination from 'react-bootstrap/Pagination';
 import Row from 'react-bootstrap/Row';
 import React from 'react';
 import Spinner from 'react-bootstrap/Spinner';
@@ -19,6 +19,7 @@ class SearchTerm extends React.Component {
     super(props);
     this.state = {
       page: 1,
+      pages: null,
       verses: null,
       hoveredCodes: [],
       clickedCodes: [],
@@ -33,10 +34,11 @@ class SearchTerm extends React.Component {
     this.fetchVerses();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps.location !== this.props.location) {
-      this.setState({verses: null})
-      this.fetchVerses();
+      this.setState({verses: null, page: 1}, () => this.fetchVerses());
+    } else if (prevState.page !== this.state.page) {
+      this.setState({verses: null}, () => this.fetchVerses());
     }
   }
 
@@ -52,10 +54,9 @@ class SearchTerm extends React.Component {
     }
     fetch("https://api.barebonesbible.com/search/" + params)
       .then(res => res.json())
-      .then(res => this.setState({verses: res.verses}))
+      .then(res => this.setState({verses: res.verses, pages: res.pages}))
     this.setState({clickedCodes: [term]});
   }
-
 
   handleTokenHover(codes) {
     this.setState({hoveredCodes: codes});
@@ -96,6 +97,7 @@ class SearchTerm extends React.Component {
             </Col>
           </Row>
           {this.makeVerses()}
+          {this.makePagination()}
         </Container>
         <TokenModal
           strongsLookup={this.props.strongsLookup}
@@ -105,6 +107,49 @@ class SearchTerm extends React.Component {
         />
       </div>
     )
+  }
+
+  makePagination() {
+    let page = this.state.page;
+    let pages = this.state.pages;
+    if (pages === null || pages === undefined || this.state.verses === null) {
+      return null;
+    }
+    let pageList = [page - 3, page - 2, page - 1, page, page + 1, page + 2, page + 3];
+    pageList = pageList.filter(p => p >= 1 && p <= pages);
+    var left = null;
+    var right = null;
+    if (pageList[0] >= 2) {
+      left = <Pagination.Item onClick={() => this.pageClick(1)}>1</Pagination.Item>;
+      if (pageList[0] >= 3) {
+        left = <>{left}<Pagination.Ellipsis disabled={true} /></>;
+      }
+    }
+    if (pageList[pageList.length - 1] <= pages - 1) {
+      right = <Pagination.Item onClick={() => this.pageClick(pages)}>{pages}</Pagination.Item>;
+      if (pageList[pageList.length - 1] <= pages - 1) {
+        right = <><Pagination.Ellipsis disabled={true} />{right}</>;
+      }
+    }
+    return (
+      <Row lg={1}>
+        <Col>
+          <Pagination className="justify-content-center">
+            <Pagination.Prev disabled={page === 1} onClick={() => this.pageClick(page - 1)}/>
+            {left}
+            {pageList.map((p) => (
+              <Pagination.Item active={p === page} onClick={() => this.pageClick(p)}>{p}</Pagination.Item>
+            ))}
+            {right}
+            <Pagination.Next disabled={page === pages} onClick={() => this.pageClick(page + 1)}/>
+          </Pagination>
+        </Col>
+      </Row>
+    );
+  }
+
+  pageClick(page) {
+    this.setState({page: page}, () => window.scrollTo(0,0));
   }
 
   makeVerses() {

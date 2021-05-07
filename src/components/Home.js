@@ -42,7 +42,7 @@ function Home() {
             <p>
               <strong>How do I use it?</strong> You can use the Books dropdown to go to a specific chapter or use
               the search bar to look up a specific passage. <Link to="search?query=Jer+31:31-34">Try now!</Link> Then you can view
-              various English translations and click on individual words to discover their roots in the text.
+              various English translations and click on individual words to discover their roots in the text. <Link to="search?query=H2617">Try now!</Link>
             </p>
           </Col>
           <Col>

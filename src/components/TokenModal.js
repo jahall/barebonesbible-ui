@@ -31,6 +31,7 @@ class TokenModal extends React.Component {
             </>
           );
         }
+        let def = (meta.def.length <= 15) ? <strong>{meta.def}</strong> : meta.def;
         let part = (
           <span key={code}>
             <Modal.Header closeButton={isFirst}>
@@ -41,7 +42,7 @@ class TokenModal extends React.Component {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <p className="modal-section"><span className="modal-key">Strongs:</span> {meta.def} &mdash; {meta.kjv} &mdash; {meta.deriv}</p>
+              <p className="modal-section"><span className="modal-key">Definition:</span> {def} &mdash; {meta.kjv} &mdash; {meta.deriv}</p>
               <p className="modal-section"><span className="modal-key">References:</span> {occurPhrase}</p>
             </Modal.Body>
           </span>
