@@ -97,7 +97,15 @@ body {
   border-radius: 10px;
   padding: 10px 0px 0px 0px;
 }
-/* Odd verses */
 .odd-verse {
   padding: 10px 0px 0px 0px;
+}
+/* Strongs search */
+.occur-info {
+  padding-top: 10px;
+  margin-bottom: 0px;
+}
+.page-info {
+  color: gray;
+  font-size: small;
 }

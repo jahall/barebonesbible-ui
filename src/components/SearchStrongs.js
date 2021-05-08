@@ -12,12 +12,17 @@ import TokenModal from './TokenModal';
 import Verse from './Verse';
 
 
+const PAGE_SIZE = 20;
+
+
 class SearchTerm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       page: 1,
       pages: null,
+      nrefs: null,
+      nverses: null,
       verses: null,
       hoveredCodes: [],
       clickedCodes: [],
@@ -48,13 +53,13 @@ class SearchTerm extends React.Component {
     let book = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).book;
     let params = "?term=" + term;
     params += "&page=" + this.state.page;
-    params += "&size=20";
+    params += "&size=" + PAGE_SIZE.toString();
     if (book !== undefined) {
       params += "&book=" + book;
     }
     fetch("https://api.barebonesbible.com/search/" + params)
       .then(res => res.json())
-      .then(res => this.setState({verses: res.verses, pages: res.pages}))
+      .then(res => this.setState({verses: res.verses, pages: res.pages, nrefs: res.nrefs, nverses: res.nverses}))
     this.setState({clickedCodes: [term]});
   }
 
@@ -93,6 +98,7 @@ class SearchTerm extends React.Component {
                 <span className={lan}>{meta.lemma}</span> &ndash;&nbsp;
                 <span className="translit">{meta.tlit}</span>
               </h1>
+              {this.makeSubtitle()}
               <br/>
             </Col>
           </Row>
@@ -107,6 +113,49 @@ class SearchTerm extends React.Component {
         />
       </div>
     )
+  }
+  
+  makeSubtitle() {
+    if (this.state.verses === null || this.state.nrefs === null || this.props.bookLookup === null) {
+      return null;
+    }
+    let code = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).book;
+    let book = this.props.bookLookup[code];
+    let suffix = (book === undefined) ? null : <> in <strong>{book.name}</strong></>;
+    let start = (this.state.page - 1) * PAGE_SIZE;
+    let end = start + this.state.verses.length;
+    return (
+      <>
+        <p className="occur-info" align="center">
+          Occurs <strong>{this.state.nrefs} times</strong> in {this.state.nverses} verses{suffix}
+          <br/>
+          <span className="page-info">Showing verses {start}-{end} of {this.state.nverses}</span>
+        </p>
+      </>
+    );
+  }
+
+  makeVerses() {
+    if (this.state.verses === null) {
+      return this.makeSpinner();
+    } else {
+      return this.state.verses.map((verse, index) => (
+        <Verse
+          key={verse.chapterId + "." + verse.verseNum}
+          code={verse.chapterId.split(".")[0]}
+          verse={verse}
+          index={index}
+          enTranslations={this.props.enTranslations}
+          hoveredCodes={this.state.hoveredCodes}
+          clickedCodes={this.state.clickedCodes}
+          handleTokenHover={this.handleTokenHover}
+          handleTokenClick={this.handleTokenClick}
+          showCantillations={this.props.showCantillations}
+          showNiqqud={this.props.showNiqqud}
+          showTranslit={this.props.showTranslit}
+        />
+      ));
+    }
   }
 
   makePagination() {
@@ -159,29 +208,6 @@ class SearchTerm extends React.Component {
 
   pageClick(page) {
     this.setState({page: page}, () => window.scrollTo(0,0));
-  }
-
-  makeVerses() {
-    if (this.state.verses === null) {
-      return this.makeSpinner();
-    } else {
-      return this.state.verses.map((verse, index) => (
-        <Verse
-          key={verse.chapterId + "." + verse.verseNum}
-          code={verse.chapterId.split(".")[0]}
-          verse={verse}
-          index={index}
-          enTranslations={this.props.enTranslations}
-          hoveredCodes={this.state.hoveredCodes}
-          clickedCodes={this.state.clickedCodes}
-          handleTokenHover={this.handleTokenHover}
-          handleTokenClick={this.handleTokenClick}
-          showCantillations={this.props.showCantillations}
-          showNiqqud={this.props.showNiqqud}
-          showTranslit={this.props.showTranslit}
-        />
-      ));
-    }
   }
 
   makeSpinner() {

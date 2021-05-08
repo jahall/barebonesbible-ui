@@ -20,18 +20,8 @@ class TokenModal extends React.Component {
       let lan = (code.startsWith("H")) ? "hebrew" : "greek";
       let meta = strongsLookup[lan][code];
       if (meta !== undefined) {
-        var occurPhrase;
-        if (meta.count === 1) {
-          occurPhrase = <>Occurs <strong><Link to={"/strongs/" + code}>only once</Link></strong>; see {this.refToUrl(meta.refs[0])}</>;
-        } else {
-          occurPhrase = (
-            <>
-              Occurs <strong><Link to={"/strongs/" + code}>{meta.count} times</Link></strong>; first occurrences can be found
-              in {this.joinList(meta.refs.map(this.refToUrl))}
-            </>
-          );
-        }
-        let def = this.makeCleverDef(meta)
+        let def = this.makeCleverDef(meta);
+        let occurrences = this.makeOccurrences(code, meta);
         let part = (
           <span key={code}>
             <Modal.Header closeButton={isFirst}>
@@ -43,7 +33,7 @@ class TokenModal extends React.Component {
             </Modal.Header>
             <Modal.Body>
               <p className="modal-section"><span className="modal-key">Definition:</span> {def}</p>
-              <p className="modal-section"><span className="modal-key">References:</span> {occurPhrase}</p>
+              <p className="modal-section"><span className="modal-key">References:</span> {occurrences}</p>
             </Modal.Body>
           </span>
         );
@@ -75,6 +65,23 @@ class TokenModal extends React.Component {
       return <><strong>{firstBit}</strong>{secondBit} {sep} {def2} {sep} {deriv}</>;
     } else {
       return <>{def1} {sep} {def2} {sep} {deriv}</>;
+    }
+  }
+
+  makeOccurrences(code, meta) {
+    if (meta.nrefs === 1) {
+      return (
+        <>
+          Occurs <strong><Link to={"/strongs/" + code}>only once</Link></strong> in {this.refToUrl(meta.refs[0])}
+        </>
+      );
+    } else {
+      return (
+        <>
+          Occurs <strong><Link to={"/strongs/" + code}>{meta.nrefs} times</Link></strong> in {meta.nverses} verses;
+          first occurrences can be found in {this.joinList(meta.refs.slice(0,3).map(this.refToUrl))}
+        </>
+      );
     }
   }
 

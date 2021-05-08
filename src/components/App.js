@@ -136,6 +136,7 @@ class App extends React.Component {
             </Route>
             <Route path="/strongs/:term">
               <SearchStrongs
+                bookLookup={this.state.bookLookup}
                 strongsLookup={this.state.strongsLookup}
                 enTranslations={this.state.enTranslations}
                 showPopups={this.state.showPopups}
