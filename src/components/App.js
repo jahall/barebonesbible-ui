@@ -146,7 +146,10 @@ class App extends React.Component {
               />
             </Route>
             <Route path="/search">
-              <Search bookAliases={this.state.bookAliases} />
+              <Search
+                bookAliases={this.state.bookAliases}
+                strongsLookup={this.state.strongsLookup}
+              />
             </Route>
           </Switch>
         </Router>

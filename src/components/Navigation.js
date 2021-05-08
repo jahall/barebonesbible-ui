@@ -41,7 +41,7 @@ class Navigation extends React.Component {
           </Nav>
           {/* Search */}
           <Form inline onSubmit={this.handleSearch}>
-            <FormControl type="text" name="query" placeholder="Passage" className="mr-sm-2" />
+            <FormControl type="text" name="query" placeholder="Reference" className="mr-sm-2" />
             <Button type="submit" variant="primary">Search</Button>
           </Form>
         </Navbar.Collapse>

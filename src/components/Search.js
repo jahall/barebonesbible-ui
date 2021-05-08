@@ -4,10 +4,10 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import React from 'react';
 import Spinner from 'react-bootstrap/Spinner';
-import { Redirect, withRouter } from "react-router-dom";
+import { Link, Redirect, withRouter } from "react-router-dom";
 import qs from 'qs';
 
-import { normalize } from "./helpers";
+import { localLoad, normalize } from "./helpers";
 
 
 class Search extends React.Component {
@@ -18,9 +18,10 @@ class Search extends React.Component {
   render() {
     var book;
     var match;
-    /* Alias list not loaded yet */
+    /* Alias list and strongs not loaded yet */
     const bookAliases = this.props.bookAliases;
-    if (bookAliases === null) {
+    const strongsLookup = this.props.strongsLookup;
+    if (bookAliases === null || strongsLookup === null) {
       return this.info(
         <>
           <br/><br/><br/><br/>
@@ -32,6 +33,7 @@ class Search extends React.Component {
     }
     /* Fetch user search string */
     let query = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).query.trim();
+    let errorMsg = <>Couldn't find anything for<br/>"<strong>{query}</strong>"</>;
     /* 1. Did they search for a book? */
     book = bookAliases[normalize(query)];
     if (book !== undefined) {
@@ -40,9 +42,14 @@ class Search extends React.Component {
     /* 2. Did they search for a strongs reference (optionally filtered for a book) */
     match = query.match(/^([hg]\d+)\s*(?:book:)?\s*([\w\s]+)?\s*$/i);  // note: (?:...) is "non-capturing"
     if (match !== null) {
+      let code = match[1].toUpperCase();
+      let codeInStrongs = (strongsLookup["hebrew"][code] !== undefined || strongsLookup["greek"][code] !== undefined);
+      if (!codeInStrongs) {
+        errorMsg = <>"<strong>{code}</strong>" is not a valid Strongs number</>;
+      }
       book = (match[2] === undefined) ? null : bookAliases[normalize(match[2])];
-      if (book !== undefined) {
-        let url = "/strongs/" + match[1].toUpperCase();
+      if (codeInStrongs && book !== undefined) {
+        let url = "/strongs/" + code;
         if (book !== null) {
           url = url + "?book=" + book;
         }
@@ -50,6 +57,7 @@ class Search extends React.Component {
       }
     }
     /* 3. Did they search for a specific chapter */
+    book = undefined;
     match = query.match(/^([\w\s]+[a-z])\s*(\d+)$/i);
     if (match !== null) {
       book = bookAliases[normalize(match[1])];
@@ -84,11 +92,12 @@ class Search extends React.Component {
       return <Redirect to={"/books/" + book + "/" + cv1 + "/" + cv2} />;
     }
     /* Didn't get anything */
+    let lastVisited = localLoad("lastVisited", "/home");
     return this.info(
       <>
-        <h3 className="mt-5">Couldn't find anything for<br/>"<strong>{query}</strong>"</h3>
+        <h3 className="mt-5">{errorMsg}</h3>
         <br/>
-        <p><Button variant="primary" href="/home">Take me home</Button></p>
+        <p><Button variant="primary" as={Link} to={lastVisited}>Take me back</Button></p>
       </>
     );
   }

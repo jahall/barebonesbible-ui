@@ -124,10 +124,12 @@ class SearchTerm extends React.Component {
     let suffix = (book === undefined) ? null : <> in <strong>{book.name}</strong></>;
     let start = (this.state.page - 1) * PAGE_SIZE + 1;
     let end = start + this.state.verses.length - 1;
+    let nrefPhrase = (this.state.nrefs === 1) ? <>one time</> : <>{this.state.nrefs} times</>;
+    let nverPhrase = (this.state.nverses === 1) ? <>one verse</> : <>{this.state.nverses} verses</>;
     return (
       <>
         <p className="occur-info" align="center">
-          Occurs <strong>{this.state.nrefs} times</strong> in {this.state.nverses} verses{suffix}
+          Occurs <strong>{nrefPhrase}</strong> in {nverPhrase}{suffix}
           <br/>
           <span className="page-info">Showing verses {start}-{end} of {this.state.nverses}</span>
         </p>
