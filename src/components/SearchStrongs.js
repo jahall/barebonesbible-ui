@@ -122,8 +122,8 @@ class SearchTerm extends React.Component {
     let code = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).book;
     let book = this.props.bookLookup[code];
     let suffix = (book === undefined) ? null : <> in <strong>{book.name}</strong></>;
-    let start = (this.state.page - 1) * PAGE_SIZE;
-    let end = start + this.state.verses.length;
+    let start = (this.state.page - 1) * PAGE_SIZE + 1;
+    let end = start + this.state.verses.length - 1;
     return (
       <>
         <p className="occur-info" align="center">
@@ -164,7 +164,7 @@ class SearchTerm extends React.Component {
     if (pages === null || pages === undefined || pages === 1 || this.state.verses === null) {
       return null;
     }
-    let pageList = [page - 1, page, page + 1];
+    let pageList = [page - 2, page - 1, page, page + 1, page + 2];
     pageList = pageList.filter(p => p >= 1 && p <= pages);
     if (pageList[0] === 3) {pageList.unshift(2)};
     if (pageList[0] === 2) {pageList.unshift(1)};
@@ -192,7 +192,7 @@ class SearchTerm extends React.Component {
       <Row lg={1}>
         <Col>
           <br/>
-          <Pagination className="justify-content-center">
+          <Pagination size="sm" className="justify-content-center">
             <Pagination.Prev disabled={page === 1} onClick={() => this.pageClick(page - 1)}/>
             {left}
             {pageList.map((p) => (
