@@ -18,11 +18,13 @@ class Passage extends React.Component {
       verses: null,
       hoveredCodes: [],
       clickedCodes: [],
+      modalCodes: [],
       showModal: false,
     };
     this.handleTokenHover = this.handleTokenHover.bind(this);
     this.handleTokenClick = this.handleTokenClick.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
+    this.handleStrongsModalClick = this.handleStrongsModalClick.bind(this);
   }
 
   componentDidMount() {
@@ -65,9 +67,16 @@ class Passage extends React.Component {
     if (typeof codes !== 'undefined') {
       this.setState({
         clickedCodes: codes,
+        modalCodes: codes,
         showModal: codes.length > 0,
       });
     }
+  }
+
+  handleStrongsModalClick(codes) {
+    this.setState({
+      modalCodes: codes,
+    });
   }
 
   handleModalClose() {
@@ -97,8 +106,10 @@ class Passage extends React.Component {
         <TokenModal
           strongsLookup={this.props.strongsLookup}
           clickedCodes={this.state.clickedCodes}
+          modalCodes={this.state.modalCodes}
           show={this.props.showPopups && this.state.showModal}
           handleClose={this.handleModalClose}
+          handleStrongsModalClick={this.handleStrongsModalClick}
         />
       </div>
     )
@@ -109,7 +120,7 @@ class Passage extends React.Component {
     if (chapter === undefined) {
       return [null, null];
     }
-    chapter = parseInt(chapter);
+    chapter = parseInt(chapter, 10);
     let lastChapter = book.chapters;
     let prevChapterLink = "/books/" + code + "/" + (chapter - 1).toString();
     let nextChapterLink = "/books/" + code + "/" + (chapter + 1).toString();
@@ -139,15 +150,15 @@ class Passage extends React.Component {
     if (chapter !== undefined) {
       return chapter
     }
-    let [_, start, end] = this.getVerseRange();
+    let [, start, end] = this.getVerseRange();
     let cv1 = start.split(".");
     let cv2 = end.split(".");
     if (start === end) {
-      return <>{cv1[0]}<span style={{fontSize: "large"}}>:{cv1[1]}</span></>
+      return <React.Fragment>{cv1[0]}<span style={{fontSize: "large"}}>:{cv1[1]}</span></React.Fragment>
     } else if (cv1[0] === cv2[0]) {
-      return <>{cv1[0]}<span style={{fontSize: "large"}}>:{cv1[1]}-{cv2[1]}</span></>
+      return <React.Fragment>{cv1[0]}<span style={{fontSize: "large"}}>:{cv1[1]}-{cv2[1]}</span></React.Fragment>
     } else {
-      return <>{cv1[0]}<span style={{fontSize: "large"}}>:{cv1[1]}</span>-{cv2[0]}<span style={{fontSize: "large"}}>:{cv2[1]}</span></>
+      return <React.Fragment>{cv1[0]}<span style={{fontSize: "large"}}>:{cv1[1]}</span>-{cv2[0]}<span style={{fontSize: "large"}}>:{cv2[1]}</span></React.Fragment>
     }
   }
 

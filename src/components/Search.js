@@ -23,17 +23,17 @@ class Search extends React.Component {
     const strongsLookup = this.props.strongsLookup;
     if (bookAliases === null || strongsLookup === null) {
       return this.info(
-        <>
+        <React.Fragment>
           <br/><br/><br/><br/>
           <Spinner animation="border" role="status">
             <span className="sr-only">Loading...</span>
           </Spinner>
-        </>
+        </React.Fragment>
       );
     }
     /* Fetch user search string */
     let query = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).query.trim();
-    let errorMsg = <>Couldn't find anything for<br/>"<strong>{query}</strong>"</>;
+    let errorMsg = <React.Fragment>Couldn't find anything for<br/>"<strong>{query}</strong>"</React.Fragment>;
     /* 1. Did they search for a book? */
     book = bookAliases[normalize(query)];
     if (book !== undefined) {
@@ -45,7 +45,7 @@ class Search extends React.Component {
       let code = match[1].toUpperCase();
       let codeInStrongs = (strongsLookup["hebrew"][code] !== undefined || strongsLookup["greek"][code] !== undefined);
       if (!codeInStrongs) {
-        errorMsg = <>"<strong>{code}</strong>" is not a valid Strongs number</>;
+        errorMsg = <React.Fragment>"<strong>{code}</strong>" is not a valid Strongs number</React.Fragment>;
       }
       book = (match[2] === undefined) ? null : bookAliases[normalize(match[2])];
       if (codeInStrongs && book !== undefined) {
@@ -94,11 +94,11 @@ class Search extends React.Component {
     /* Didn't get anything */
     let lastVisited = localLoad("lastVisited", "/home");
     return this.info(
-      <>
+      <React.Fragment>
         <h3 className="mt-5">{errorMsg}</h3>
         <br/>
         <p><Button variant="primary" as={Link} to={lastVisited}>Take me back</Button></p>
-      </>
+      </React.Fragment>
     );
   }
 

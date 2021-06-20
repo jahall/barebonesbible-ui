@@ -121,19 +121,17 @@ class SearchTerm extends React.Component {
     }
     let code = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).book;
     let book = this.props.bookLookup[code];
-    let suffix = (book === undefined) ? null : <> in <strong>{book.name}</strong></>;
+    let suffix = (book === undefined) ? null : <React.Fragment> in <strong>{book.name}</strong></React.Fragment>;
     let start = (this.state.page - 1) * PAGE_SIZE + 1;
     let end = start + this.state.verses.length - 1;
-    let nrefPhrase = (this.state.nrefs === 1) ? <>one time</> : <>{this.state.nrefs} times</>;
-    let nverPhrase = (this.state.nverses === 1) ? <>one verse</> : <>{this.state.nverses} verses</>;
+    let nrefPhrase = (this.state.nrefs === 1) ? <React.Fragment>one time</React.Fragment> : <React.Fragment>{this.state.nrefs} times</React.Fragment>;
+    let nverPhrase = (this.state.nverses === 1) ? <React.Fragment>one verse</React.Fragment> : <React.Fragment>{this.state.nverses} verses</React.Fragment>;
     return (
-      <>
-        <p className="occur-info" align="center">
-          Occurs <strong>{nrefPhrase}</strong> in {nverPhrase}{suffix}
-          <br/>
-          <span className="page-info">Showing verses {start}-{end} of {this.state.nverses}</span>
-        </p>
-      </>
+      <p className="occur-info" align="center">
+        Occurs <strong>{nrefPhrase}</strong> in {nverPhrase}{suffix}
+        <br/>
+        <span className="page-info">Showing verses {start}-{end} of {this.state.nverses}</span>
+      </p>
     );
   }
 
@@ -176,18 +174,18 @@ class SearchTerm extends React.Component {
     var right = null;
     if (pageList[0] !== 1) {
       left = (
-        <>
+        <React.Fragment>
           <Pagination.Item onClick={() => this.pageClick(1)}>1</Pagination.Item>
           <Pagination.Ellipsis disabled={true} />
-        </>
+        </React.Fragment>
       );
     }
     if (pageList[pageList.length - 1] !== pages) {
       right = (
-        <>
+        <React.Fragment>
           <Pagination.Ellipsis disabled={true} />
           <Pagination.Item onClick={() => this.pageClick(pages)}>{pages}</Pagination.Item>
-        </>
+        </React.Fragment>
       );
     }
     return (
