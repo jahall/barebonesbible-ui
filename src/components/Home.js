@@ -59,7 +59,7 @@ function Home() {
           <Col>
             <h2 className="mt-3">About</h2>
             <p>
-              <strong>My name is Joe.</strong> I like maths, being outside, programming and Jesus. I decided to
+              <strong>My name is Joe.</strong> I like maths, being outside, programming and Jesus! I decided to
               build B<sup>3</sup> as a gift for my primary user and great encourager: my dad! However, once I finished
               I thought <em>"this is actually quite a neat tool, maybe I should share it more broadly."</em> So here
               you go, world &ndash; enjoy! I would love to hear feedback on your experience of using this site, what you like or what could be
