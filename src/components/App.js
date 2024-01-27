@@ -39,7 +39,7 @@ class App extends React.Component {
       bookAliases: null,
       strongsLookup: null,
       enTranslations: localLoad("enTranslations", ["web"]),
-      showLxx: localLoad("showLxx", false),  /* toggle for strongs popups */
+      showLxx: localLoad("showLxx", false),  /* toggle for lxx */
       showPopups: localLoad("showPopups", true),  /* toggle for strongs popups */
       showTranslit: localLoad("showTranslit", true),  /* toggle for showing transliteration */
       showCantillations: localLoad("showCantillations", false),  /* toggle for showing cantillations */
