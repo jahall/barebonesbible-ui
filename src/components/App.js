@@ -39,6 +39,7 @@ class App extends React.Component {
       bookAliases: null,
       strongsLookup: null,
       enTranslations: localLoad("enTranslations", ["web"]),
+      showLxx: localLoad("showLxx", false),  /* toggle for strongs popups */
       showPopups: localLoad("showPopups", true),  /* toggle for strongs popups */
       showTranslit: localLoad("showTranslit", true),  /* toggle for showing transliteration */
       showCantillations: localLoad("showCantillations", false),  /* toggle for showing cantillations */
@@ -93,6 +94,7 @@ class App extends React.Component {
           <Navigation
             collections={this.state.collections}
             enTranslations={this.state.enTranslations}
+            showLxx={this.state.showLxx}
             showPopups={this.state.showPopups}
             showTranslit={this.state.showTranslit}
             showCantillations={this.state.showCantillations}
@@ -112,6 +114,7 @@ class App extends React.Component {
                 bookLookup={this.state.bookLookup}
                 strongsLookup={this.state.strongsLookup}
                 enTranslations={this.state.enTranslations}
+                showLxx={this.state.showLxx}
                 showPopups={this.state.showPopups}
                 showCantillations={this.state.showCantillations}
                 showNiqqud={this.state.showNiqqud}
@@ -123,6 +126,7 @@ class App extends React.Component {
                 bookLookup={this.state.bookLookup}
                 strongsLookup={this.state.strongsLookup}
                 enTranslations={this.state.enTranslations}
+                showLxx={this.state.showLxx}
                 showPopups={this.state.showPopups}
                 showCantillations={this.state.showCantillations}
                 showNiqqud={this.state.showNiqqud}
@@ -139,6 +143,7 @@ class App extends React.Component {
                 bookLookup={this.state.bookLookup}
                 strongsLookup={this.state.strongsLookup}
                 enTranslations={this.state.enTranslations}
+                showLxx={this.state.showLxx}
                 showPopups={this.state.showPopups}
                 showCantillations={this.state.showCantillations}
                 showNiqqud={this.state.showNiqqud}

@@ -178,6 +178,7 @@ class Passage extends React.Component {
           clickedCodes={this.state.clickedCodes}
           handleTokenHover={this.handleTokenHover}
           handleTokenClick={this.handleTokenClick}
+          showLxx={this.props.showLxx}
           showCantillations={this.props.showCantillations}
           showNiqqud={this.props.showNiqqud}
           showTranslit={this.props.showTranslit}

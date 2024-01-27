@@ -10,13 +10,11 @@ import Token from './Token';
 class Verse extends React.Component {
 
   render() {
-    let code = this.props.code;
     let verse = this.props.verse;
-
     let key = verse.chapterId + "." + verse.verseNum.toString();
-    let english = this.constructEnglish(code, verse);
-    let hebrew = this.constructForeign(code, verse, "hebrew");
-    let greek = this.constructForeign(code, verse, "greek");
+    let english = this.constructEnglish(verse);
+    let hebrew = this.constructForeign(verse, "hebrew");
+    let greek = this.constructForeign(verse, "greek");
     let cls = (this.props.index % 2 === 0) ? "even-verse" : "odd-verse";
     return (
       <Row key={key} lg={1} className={cls}>
@@ -29,7 +27,7 @@ class Verse extends React.Component {
     );
   }
 
-  constructEnglish(code, verse) {
+  constructEnglish(verse) {
     const selected = this.props.enTranslations;
     const translations = verse.translations.filter(
       elem => elem.lan === "en" && selected.includes(elem.translation.toLowerCase())
@@ -65,9 +63,11 @@ class Verse extends React.Component {
     );
   }
 
-  constructForeign(code, verse, lan) {
+  constructForeign(verse, lan) {
     const lanCode = lan.substring(0, 2);
-    const translations = verse.translations.filter(elem => elem.lan === lanCode);
+    const translations = verse.translations
+      .filter(elem => elem.lan === lanCode)
+      .filter(elem => elem.translation !== "LXX" || this.props.showLxx);
     if (translations.length === 0) {
       return null;
     }

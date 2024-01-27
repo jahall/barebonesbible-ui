@@ -121,6 +121,18 @@ class Navigation extends React.Component {
           </Form>
         </div>
         <NavDropdown.Divider />
+        <NavDropdown.Header>Greek Translations</NavDropdown.Header>
+        <div style={{paddingLeft: '25px'}}>
+          <Form.Check
+            key="lxx"
+            type="checkbox"
+            label="Septuagint"
+            id="lxx"
+            defaultChecked={this.props.showLxx}
+            onChange={this.props.handleSettingsClick}
+          />
+        </div>
+        <NavDropdown.Divider />
         <NavDropdown.Header>View Options</NavDropdown.Header>
         <div style={{paddingLeft: '25px'}}>
           <Form>
