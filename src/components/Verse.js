@@ -88,7 +88,7 @@ class Verse extends React.Component {
                     <Token
                       key={lan.substring(0, 2) + tr.translation + index.toString()}
                       strongs={token.strongs}
-                      text={token.text}  // this.fixForeign(token.text) <- TEMPORARY
+                      text={this.fixForeign(token.text)}
                       type={token.type}
                       hoveredCodes={this.props.hoveredCodes}
                       clickedCodes={this.props.clickedCodes}
@@ -121,6 +121,7 @@ class Verse extends React.Component {
   }
 
   fixForeign(text){
+    // NOTE: Looks like the current hebrew font can't show cantillations anyway :(
     if (!this.props.showCantillations) {
       text = text.replace(/[\u0591-\u05AF]/g,"");
     }
