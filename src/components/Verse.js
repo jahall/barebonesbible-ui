@@ -88,7 +88,7 @@ class Verse extends React.Component {
                     <Token
                       key={lan.substring(0, 2) + tr.translation + index.toString()}
                       strongs={token.strongs}
-                      text={this.fixForeign(token.text)}
+                      text={token.text}  // this.fixForeign(token.text) <- TEMPORARY
                       type={token.type}
                       hoveredCodes={this.props.hoveredCodes}
                       clickedCodes={this.props.clickedCodes}
